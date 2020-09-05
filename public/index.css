@@ -1,0 +1,87 @@
+/***
+ * CodeMirror customization
+ */
+
+.CodeMirror {
+  background-color:#ffd;
+  font-size: 11pt;
+  height: calc(100% - 300px);
+  width: 100%;
+  min-height: 300px;
+}
+
+.CodeMirror-gutters {
+  background: inherit;
+}
+
+/***
+ * Application configs
+ */
+
+header, main, footer {
+  width: 100%;
+}
+
+header {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  background-color: #e0ebf5;
+}
+
+header .title {
+  margin-left: 16px;
+  font-size: 20px;
+}
+
+header .button-container {
+  margin-left: 16px;
+  display: flex;
+}
+
+header .link-to-github {
+  margin-left: 12px;
+}
+
+main {
+  width: 100%;
+  height: calc(100vh - 52px);
+}
+
+.code-body {
+  display: none;
+}
+
+.result, .options {
+  width: calc(100% - 16px);
+  height: calc(300px - 16px);
+  padding: 8px;
+}
+
+.result.hidden, .options.hidden {
+  display: none;
+}
+
+.result {
+  white-space: pre;
+}
+
+.result .line {
+  width: 100%;
+}
+
+.result .line.stdout {
+  color: #000;
+}
+
+.result .line.stderr {
+  color: #c33;
+}
+
+.result .line.system {
+  color: #999;
+}
+
+.options {
+  background-color: #f0f0f0;
+}

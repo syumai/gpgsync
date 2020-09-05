@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<head>
+  <title>The Go Playground</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/lib/codemirror.css" integrity="sha256-F8x+Z3ibZvrT6AYhdYRAhBaA77XYocFUTGA/lMGNVYE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize-css@2.3.1/normalize.css" integrity="sha256-oQhE1gzQ/RLRlHgKfVUhrAe03FJbQLmTjY5ngEJPhdg=" crossorigin="anonymous">
+  <link rel="stylesheet" href="./index.css">
+  <style>
+    span.other-client {
+      height: 11pt !important;
+      margin: inherit !important;
+      display: inherit !important;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="title">The Go Playground</div>
+    <div class="button-container">
+      <button id="gpRunBtn">Run</button>
+      <button id="gpFmtBtn">Format</button>
+      <button id="gpShareBtn">Share</button>
+      <button id="gpOptionsBtn">Options</button>
+    </div>
+    <div class="link-to-github">
+      <a href="https://github.com/syumai/goplayground-js" target="_blank">GitHub</a>
+    </div>
+  </header>
+  <main class="app">
+    <textarea id="gpBody" class="code-body">
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Println("Hello, world!")
+}
+</textarea>
+    <div id="gpResult" class="result"></div>
+    <div id="gpOptions" class="options hidden">
+      <form id="gpOptionsForm" action="#">
+        <div>
+          <label>
+            <input type="checkbox" name="goimports">
+            goimports
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" name="go2go">
+            go2go
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" name="vimMode">
+            Vim mode
+          </label>
+        </div>
+        <div>
+          <label>
+            Tab width
+            <input type="number" name="tabSize">
+          </label>
+        </div>
+        <button>Save</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/lib/codemirror.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/mode/go/go.js" integrity="sha256-Tgg9NnYSrp+/RdVXp/tw7yqwdONCRJNxfvavRgdjzdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/keymap/vim.js" integrity="sha256-crz2PM+EqIPrs8TOTTH0VDjFkpMTmkuCygpDpymsvs0=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ot.js/0.0.15/ot-min.js" integrity="sha512-OZdsRdCJMHqCeo6OLoDnPxCEKW1R4xFFPr+IIlCicemt58vWMR26VQ6GwQEf/0qrpe7MuV8WVKhu5ExL1q34Rw==" crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="./index.js"></script>
+</body>
+</html>
