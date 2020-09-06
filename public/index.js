@@ -1,9 +1,4 @@
-/***
- * example.js
- *
- * This file is a initializing script for The Go Plaground example.
- * See: https://syumai.github.io/goplayground-js
- */
+/* Original contents is available on https://github.com/syumai/go-playground-custom */
 
 import { GoPlayground } from "https://cdn.jsdelivr.net/npm/@syumai/goplayground@0.1.6/index.js";
 const gpOriginal = new GoPlayground();
