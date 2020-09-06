@@ -2,6 +2,10 @@
 
 * A multi-person editable version of The Go Playground.
 
+## Demo
+
+https://gpgsync.herokuapp.com
+
 ## Usage
 
 ```
