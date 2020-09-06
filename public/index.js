@@ -212,6 +212,10 @@ const socket = io();
 const adapter = new ot.SocketIOAdapter(socket);
 const cmAdapter = new ot.CodeMirrorAdapter(editor);
 
+socket.emit("join", {
+  docId: "test",
+});
+
 socket.on("doc", (data) => {
   editor.setValue(data.str);
   new ot.EditorClient(data.revision, data.clients, adapter, cmAdapter);
