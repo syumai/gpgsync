@@ -1,6 +1,6 @@
 # gpgsync
 
-* A multi-person editable version of The Go Playground.
+* The Go Playground with coedit mode.
 
 ## Demo
 
