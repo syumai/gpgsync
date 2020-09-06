@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/syumai/gpgsync#readme",
   "dependencies": {
+    "ejs": "^3.1.5",
     "express": "^4.17.1",
     "ot": "git+https://github.com/Operational-Transformation/ot.js.git#master",
     "socket.io": "^2.3.0"
