@@ -4,15 +4,8 @@
   <title>The Go Playground</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/lib/codemirror.css" integrity="sha256-F8x+Z3ibZvrT6AYhdYRAhBaA77XYocFUTGA/lMGNVYE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize-css@2.3.1/normalize.css" integrity="sha256-oQhE1gzQ/RLRlHgKfVUhrAe03FJbQLmTjY5ngEJPhdg=" crossorigin="anonymous">
-  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="/app.css">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-    span.other-client {
-      height: 11pt !important;
-      margin: inherit !important;
-      display: inherit !important;
-    }
-  </style>
 </head>
 
 <body>
@@ -29,17 +22,7 @@
     </div>
   </header>
   <main class="app">
-    <textarea id="gpBody" class="code-body">
-package main
-
-import (
-	"fmt"
-)
-
-func main() {
-	fmt.Println("Hello, world!")
-}
-</textarea>
+    <textarea id="gpBody" class="code-body"></textarea>
     <div id="gpResult" class="result"></div>
     <div id="gpOptions" class="options hidden">
       <form id="gpOptionsForm" action="#">
@@ -77,6 +60,9 @@ func main() {
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/keymap/vim.js" integrity="sha256-crz2PM+EqIPrs8TOTTH0VDjFkpMTmkuCygpDpymsvs0=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ot.js/0.0.15/ot-min.js" integrity="sha512-OZdsRdCJMHqCeo6OLoDnPxCEKW1R4xFFPr+IIlCicemt58vWMR26VQ6GwQEf/0qrpe7MuV8WVKhu5ExL1q34Rw==" crossorigin="anonymous"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script type="module" src="./index.js"></script>
+  <script>
+    const roomId = "<%= roomId %>";
+  </script>
+  <script type="module" src="/app.js"></script>
 </body>
 </html>

@@ -31,24 +31,6 @@ const options =
     ? parsedOptions
     : defaultOptions;
 
-async function loadSharedContent() {
-  const params = new URLSearchParams(window.location.search);
-  const p = params.get("p");
-  const go2goEnabled = params.get("go2go") === "on";
-  if (p === null) {
-    return;
-  }
-  editor.setValue("");
-  let gp = gpOriginal;
-  if (go2goEnabled) {
-    options.go2go = true;
-    gp = gpGo2Go;
-  }
-  const result = await gp.download(p);
-  editor.setValue(result);
-}
-loadSharedContent();
-
 const gpResult = document.getElementById("gpResult");
 const gpOptions = document.getElementById("gpOptions");
 
@@ -127,7 +109,6 @@ async function executeShare() {
   const result = await gp.share(gpBody.value);
   gpResult.innerHTML = "";
   gpResult.appendChild(createLink(`${gp.hostName}/p/${result}`));
-  window.history.replaceState({}, document.title, genShareQuery(result));
 }
 
 gpRunBtn.addEventListener("click", () => executeRun());
@@ -213,7 +194,7 @@ const adapter = new ot.SocketIOAdapter(socket);
 const cmAdapter = new ot.CodeMirrorAdapter(editor);
 
 socket.emit("join", {
-  docId: "test",
+  docId: roomId,
 });
 
 socket.on("doc", (data) => {

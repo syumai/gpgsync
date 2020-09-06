@@ -16,6 +16,12 @@
   background: inherit;
 }
 
+span.other-client {
+  height: 11pt !important;
+  margin: inherit !important;
+  display: inherit !important;
+}
+
 /***
  * Application configs
  */
