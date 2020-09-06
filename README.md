@@ -21,13 +21,10 @@ node server.js // Runs on http://localhost:8080
 
 ## References
 
-* Base Idea from ttakuru88: https://github.com/ttakuru88/ot_sample
-  - Blog: https://kray.jp/blog/algorithm-operational-transformation/
-
-## References
-
 * Original `The Go Playground` by Go team
   - https://play.golang.org/
+* Base Idea from ttakuru88: https://github.com/ttakuru88/ot_sample
+  - Blog: https://kray.jp/blog/algorithm-operational-transformation/
 
 ## Author
 
