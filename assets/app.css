@@ -54,8 +54,17 @@ header .button-container {
   display: flex;
 }
 
+button {
+  padding: 2px 8px;
+  margin-right: 3px;
+  border: 1px solid #375EAB;
+  border-radius: 5px;
+  background: #375EAB;
+  color: white;
+}
+
 header .link-to-github {
-  margin-left: 12px;
+  margin-left: 9px;
 }
 
 main {

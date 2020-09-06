@@ -37,6 +37,10 @@ body {
   align-items: center;
 }
 
+.dialog .body .forms form .inputs {
+  margin-bottom: 8px;
+}
+
 button {
   padding: 2px 8px;
   border: 1px solid #375EAB;
@@ -50,9 +54,6 @@ input[type="text"] {
     border: 1px solid #ccc;
     background: #fff;
     color: black;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 5px;
     border-radius: 5px;
     box-sizing: border-box;
     height: 30px;
