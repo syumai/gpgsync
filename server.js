@@ -64,7 +64,7 @@ io.on("connection", (socket) => {
 });
 
 if (module === require.main) {
-  const port = process.env.PORT || 8080;
+  const port = process.env.PORT || 8088;
   server.listen(port, () => {
     console.log(`App listening on port ${port}`);
     console.log("Press Ctrl+C to quit.");
