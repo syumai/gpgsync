@@ -10,7 +10,7 @@ https://gpgsync.herokuapp.com
 
 ```
 npm install
-node server.js // Runs on http://localhost:8080
+node server.js // Runs on http://localhost:8088
 ```
 
 ## Dependencies
