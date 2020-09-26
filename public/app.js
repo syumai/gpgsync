@@ -195,6 +195,7 @@ const cmAdapter = new ot.CodeMirrorAdapter(editor);
 
 socket.emit("join", {
   docId: roomId,
+  sharedContentId,
 });
 
 socket.on("doc", (data) => {

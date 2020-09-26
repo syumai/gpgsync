@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "A multi-person editable version of The Go Playground.",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/syumai/gpgsync#readme",
   "dependencies": {
+    "@syumai/goplayground-node": "^0.1.7",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "ot": "git+https://github.com/Operational-Transformation/ot.js.git#master",

@@ -3,7 +3,7 @@
 <head>
   <title>The Go Playground - with coedit mode (unofficial) -</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize-css@2.3.1/normalize.css" integrity="sha256-oQhE1gzQ/RLRlHgKfVUhrAe03FJbQLmTjY5ngEJPhdg=" crossorigin="anonymous">
-  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="/home.css">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 
@@ -30,6 +30,9 @@
       </div>
     </div>
   </div>
-  <script type="module" src="./index.js"></script>
+  <script>
+    const sharedContentId = "<%= sharedContentId %>";
+  </script>
+  <script type="module" src="/home.js"></script>
 </body>
 </html>
