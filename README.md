@@ -10,14 +10,17 @@ https://gpgsync.herokuapp.com
 
 ```console
 # Open room
-https://gpgsync.herokuapp.com/rooms/someRoomID
+https://gpgsync.herokuapp.com/rooms/:roomId
 
-# Use shared content to create room (exampleID: xXqRTAb2hu7)
-https://gpgsync.herokuapp.com/p/xXqRTAb2hu7
+# Use shared content to create room
+https://gpgsync.herokuapp.com/p/:sharedContentId
 
-# Open room with shared content (exampleID: xXqRTAb2hu7)
-https://gpgsync.herokuapp.com/rooms/someRoomID/p/xXqRTAb2hu7
+# Open room with shared content
+https://gpgsync.herokuapp.com/rooms/:roomId/p/:sharedContentId
 ```
+
+* shared content ID can be gotten by Go Playground's `share` function.
+  - example: https://gpgsync.herokuapp.com/rooms/exampleRoom/p/xXqRTAb2hu7
 
 ## Usage
 
