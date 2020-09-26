@@ -10,3 +10,8 @@ class InvalidArgumentError extends APIError {
     super(400, "Invalid Argument: " + message);
   }
 }
+
+module.exports = {
+  APIError,
+  InvalidArgumentError,
+};

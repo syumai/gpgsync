@@ -5,6 +5,8 @@ const socketio = require("socket.io");
 const { homeHandler, roomHandler, ioServerHandler } = require("./handlers");
 const { invalidURIValidatorHandler, errorHandler } = require("./middlewares");
 
+const publicPath = path.join(__dirname, "../public");
+
 /***
  * Initialize server
  */
@@ -19,15 +21,15 @@ const io = socketio(server, {
  */
 app.set("view engine", "ejs");
 
-const publicPath = path.join(__dirname, "../public");
-app.use(express.static(publicPath));
 app.use(invalidURIValidatorHandler);
-app.use(errorHandler);
+app.use(express.static(publicPath));
 
 app.get("/", homeHandler);
 app.get("/p/:sharedContentId", homeHandler);
 app.get("/rooms/:roomId/p/:sharedContentId", roomHandler);
 app.get("/rooms/:roomId", roomHandler);
+
+app.use(errorHandler);
 
 io.on("connection", ioServerHandler);
 

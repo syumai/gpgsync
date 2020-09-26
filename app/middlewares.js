@@ -1,3 +1,5 @@
+const { InvalidArgumentError, APIError } = require("./errors");
+
 const invalidURIValidatorHandler = (req, res, next) => {
   let err;
   try {
@@ -6,12 +8,14 @@ const invalidURIValidatorHandler = (req, res, next) => {
     err = e;
   }
   if (err) {
-    throw new InvalidArgumentError("Invalid URI format");
+    next(new InvalidArgumentError("Invalid URI format"));
+    return;
   }
   next();
 };
 
 const errorHandler = (err, req, res, next) => {
+  if (res.headersSent) return next(err);
   if (err instanceof APIError) {
     if (err.code !== 400) {
       console.error(err.stack);

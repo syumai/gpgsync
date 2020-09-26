@@ -1,3 +1,5 @@
+const { InvalidArgumentError } = require("./errors");
+
 const maxRoomIdLength = 20;
 const maxSharedContentIdLength = 20;
 
