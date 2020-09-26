@@ -6,7 +6,7 @@
 
 https://gpgsync.herokuapp.com
 
-### Additional features
+### Features
 
 ```
 # Open room
