@@ -6,6 +6,19 @@
 
 https://gpgsync.herokuapp.com
 
+### Additional features
+
+```
+# Open room
+https://gpgsync.herokuapp.com/rooms/someRoomID
+
+# Use shared content to create room
+https://gpgsync.herokuapp.com/p/xXqRTAb2hu7
+
+# Open room with shared content
+https://gpgsync.herokuapp.com/rooms/someRoomID/p/xXqRTAb2hu7
+```
+
 ## Usage
 
 ```
