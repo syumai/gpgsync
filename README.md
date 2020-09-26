@@ -8,14 +8,14 @@ https://gpgsync.herokuapp.com
 
 ### Features
 
-```
+```console
 # Open room
 https://gpgsync.herokuapp.com/rooms/someRoomID
 
-# Use shared content to create room
+# Use shared content to create room (exampleID: xXqRTAb2hu7)
 https://gpgsync.herokuapp.com/p/xXqRTAb2hu7
 
-# Open room with shared content
+# Open room with shared content (exampleID: xXqRTAb2hu7)
 https://gpgsync.herokuapp.com/rooms/someRoomID/p/xXqRTAb2hu7
 ```
 
