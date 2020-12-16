@@ -8,10 +8,9 @@ let gp = gpOriginal;
 const gpBody = document.getElementById("gpBody");
 const editor = CodeMirror.fromTextArea(gpBody, {
   lineNumbers: true,
-  mode: "go",
+  mode: "text/x-go",
   tabSize: 8,
   indentUnit: 8,
-  smartIndent: true,
   indentWithTabs: true,
   matchBrackets: true,
 });
@@ -159,6 +158,10 @@ function initOptionsForm() {
       const input = gpOptionsForm[key];
       if (input.type === "checkbox") {
         options[key] = input.checked;
+        continue;
+      }
+      if (input.type === "number") {
+        options[key] = parseInt(input.value);
         continue;
       }
       options[key] = input.value;
