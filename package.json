@@ -13,7 +13,7 @@
   },
   "author": "syumai",
   "engines": {
-    "node": "15.x"
+    "node": "12.x"
   },
   "license": "MIT",
   "bugs": {
