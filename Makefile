@@ -1,3 +1,3 @@
 .PHONY: deploy
 deploy:
-	git push heroku master
+	git push heroku main
