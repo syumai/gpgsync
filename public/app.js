@@ -2,7 +2,7 @@
 
 import { GoPlayground } from "https://cdn.jsdelivr.net/npm/@syumai/goplayground@0.1.6/index.js";
 const gpOriginal = new GoPlayground();
-const gpGo2Go = new GoPlayground("https://go2goplay.golang.org");
+const gpTip = new GoPlayground("https://gotipplay.golang.org");
 let gp = gpOriginal;
 
 const gpBody = document.getElementById("gpBody");
@@ -17,10 +17,10 @@ const editor = CodeMirror.fromTextArea(gpBody, {
 window.editor = editor;
 
 const optionsStr = window.localStorage.getItem("goplayground-options");
-const optionKeys = ["goimports", "go2go", "vimMode", "tabSize"];
+const optionKeys = ["goimports", "gotip", "vimMode", "tabSize"];
 const defaultOptions = {
   goimports: false,
-  go2go: false,
+  gotip: false,
   vimMode: false,
   tabSize: 8,
 };
@@ -96,8 +96,8 @@ async function executeFmt() {
 
 function genShareQuery(key) {
   let query = `?p=${key}`;
-  if (options.go2go) {
-    query += "&go2go=on";
+  if (options.gotip) {
+    query += "&gotip=on";
   }
   return query;
 }
@@ -131,8 +131,8 @@ function applyOptions() {
   editor.setOption("keyMap", options.vimMode ? "vim" : "default");
   editor.setOption("tabSize", options.tabSize);
   editor.setOption("indentUnit", options.tabSize);
-  if (options.go2go) {
-    gp = gpGo2Go;
+  if (options.gotip) {
+    gp = gpTip;
   } else {
     gp = gpOriginal;
   }
