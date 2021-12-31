@@ -5,6 +5,7 @@
  */
 
 .CodeMirror {
+  border: 0.0625rem solid #c0c2c3;
   background-color: #ffd;
   font-size: 11pt;
   font-family: Menlo, monospace;
@@ -27,6 +28,11 @@ span.other-client {
  * Application configs
  */
 
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
 header,
 main,
 footer {
@@ -34,11 +40,21 @@ footer {
 }
 
 header {
-  height: 52px;
+  height: 56px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  background-color: #e0ebf5;
+  background-color: #007d9c;
+  color: #fff;
+}
+
+a {
+  color: #fff;
+}
+
+a:hover {
+  opacity: 0.8;
 }
 
 @media screen and (max-width: 740px) {
@@ -49,7 +65,14 @@ header {
 
 header .title {
   margin-left: 16px;
-  font-size: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+header .header-content {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
 }
 
 header .button-container {
@@ -58,12 +81,21 @@ header .button-container {
 }
 
 button {
-  padding: 2px 8px;
-  margin-right: 3px;
-  border: 1px solid #375eab;
-  border-radius: 5px;
-  background: #375eab;
-  color: white;
+  padding: 3px 8px;
+  margin-right: 9px;
+  border-radius: 0.1875rem;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
+  box-sizing: border-box;
+  border: none;
+  background-color: #f7f9fa;
+  color: #007d9c;
+  font: bold 0.875rem Roboto, sans-serif;
+}
+
+button.primary {
+  padding: 3px 14px;
+  border: 0.0625rem solid #00add8;
+  background-color: #ffffdd;
 }
 
 header .link-to-github {
@@ -98,7 +130,9 @@ main {
 }
 
 .result {
+  font-size: 0.9rem;
   white-space: pre;
+  font-family: Menlo, monospace;
 }
 
 .result .line {
