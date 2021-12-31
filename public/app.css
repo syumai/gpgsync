@@ -5,7 +5,7 @@
  */
 
 .CodeMirror {
-  background-color:#ffd;
+  background-color: #ffd;
   font-size: 11pt;
   font-family: Menlo, monospace;
   height: calc(100% - 300px);
@@ -27,7 +27,9 @@ span.other-client {
  * Application configs
  */
 
-header, main, footer {
+header,
+main,
+footer {
   width: 100%;
 }
 
@@ -39,7 +41,7 @@ header {
   background-color: #e0ebf5;
 }
 
-@media screen and (max-width:740px){
+@media screen and (max-width: 740px) {
   header {
     height: 70px;
   }
@@ -58,9 +60,9 @@ header .button-container {
 button {
   padding: 2px 8px;
   margin-right: 3px;
-  border: 1px solid #375EAB;
+  border: 1px solid #375eab;
   border-radius: 5px;
-  background: #375EAB;
+  background: #375eab;
   color: white;
 }
 
@@ -73,7 +75,7 @@ main {
   height: calc(100vh - 52px);
 }
 
-@media screen and (max-width:740px){
+@media screen and (max-width: 740px) {
   main {
     height: calc(100vh - 70px);
   }
@@ -83,13 +85,15 @@ main {
   display: none;
 }
 
-.result, .options {
+.result,
+.options {
   width: calc(100% - 16px);
   height: calc(300px - 16px);
   padding: 8px;
 }
 
-.result.hidden, .options.hidden {
+.result.hidden,
+.options.hidden {
   display: none;
 }
 
