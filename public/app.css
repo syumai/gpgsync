@@ -49,10 +49,6 @@ header {
   color: #fff;
 }
 
-a {
-  color: #fff;
-}
-
 a:hover {
   opacity: 0.8;
 }
@@ -78,6 +74,15 @@ header .header-content {
 header .button-container {
   margin-left: 16px;
   display: flex;
+}
+
+header a {
+  color: #fff;
+}
+
+select {
+  margin-right: 9px;
+  border-radius: 0.1875rem;
 }
 
 button {

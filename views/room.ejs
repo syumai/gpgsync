@@ -14,6 +14,10 @@
     <div class="title">The Go Playground</div>
     <div class="header-content">
       <div class="button-container">
+        <select id="goVersion">
+          <option value="gorelease">Go release</option>
+          <option value="gotip">Go dev branch</option>
+        </select>
         <button id="gpRunBtn" class="primary">Run</button>
         <button id="gpFmtBtn">Format</button>
         <button id="gpShareBtn">Share</button>
@@ -33,12 +37,6 @@
           <label>
             <input type="checkbox" name="goimports">
             goimports
-          </label>
-        </div>
-        <div>
-          <label>
-            <input type="checkbox" name="gotip">
-            use tip version of Go (gotip)
           </label>
         </div>
         <div>

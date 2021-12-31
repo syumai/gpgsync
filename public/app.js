@@ -17,10 +17,9 @@ const editor = CodeMirror.fromTextArea(gpBody, {
 window.editor = editor;
 
 const optionsStr = window.localStorage.getItem("goplayground-options");
-const optionKeys = ["goimports", "gotip", "vimMode", "tabSize"];
+const optionKeys = ["goimports", "vimMode", "tabSize"];
 const defaultOptions = {
   goimports: false,
-  gotip: false,
   vimMode: false,
   tabSize: 8,
 };
@@ -106,6 +105,7 @@ async function executeShare() {
   editor.save();
   gpResult.textContent = waitingMsg;
   const result = await gp.share(gpBody.value);
+  console.log({ result });
   gpResult.innerHTML = "";
   gpResult.appendChild(createLink(`${gp.hostName}/p/${result}`));
 }
@@ -131,12 +131,39 @@ function applyOptions() {
   editor.setOption("keyMap", options.vimMode ? "vim" : "default");
   editor.setOption("tabSize", options.tabSize);
   editor.setOption("indentUnit", options.tabSize);
-  if (options.gotip) {
+}
+
+// initialize gotipEnabled
+const urlParams = new URLSearchParams(window.location.search);
+let gotipEnabled = urlParams.get("v") === "gotip";
+
+const goVersionSelect = document.getElementById("goVersion");
+goVersionSelect.value = gotipEnabled ? "gotip" : "gorelease";
+
+function applyGotipOption() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (gotipEnabled) {
+    urlParams.set("v", "gotip");
     gp = gpTip;
   } else {
+    urlParams.delete("v");
     gp = gpOriginal;
   }
+  const search = urlParams.toString();
+  const url = new URL(window.location.href);
+  if (search) {
+    url.search = `?${search}`;
+  } else {
+    url.search = "";
+  }
+  window.history.replaceState(null, "", url);
 }
+applyGotipOption();
+
+goVersionSelect.addEventListener("change", () => {
+  gotipEnabled = goVersionSelect.value === "gotip";
+  applyGotipOption();
+});
 
 function initOptionsForm() {
   const gpOptionsForm = document.getElementById("gpOptionsForm");
