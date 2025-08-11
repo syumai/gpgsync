@@ -6,18 +6,55 @@ import { WebsocketProvider } from 'y-websocket';
 import { CodemirrorBinding } from 'y-codemirror';
 import { GoPlayground } from '@syumai/goplayground';
 
-// Go Playground setup
-let gpOriginal, gpTip, gp;
+// Type declarations for global objects and interfaces
+interface GoPlaygroundOptions {
+  goimports: boolean;
+  vimMode: boolean;
+  tabSize: number;
+}
 
-function initGoPlayground() {
+interface GoPlaygroundResult {
+  Errors: string;
+  Events: Array<{
+    Kind: string;
+    Message: string;
+  }>;
+}
+
+interface GoPlaygroundFormatResult {
+  Error: string;
+  Body: string;
+}
+
+interface CodeMirrorEditor {
+  fromTextArea(textarea: HTMLTextAreaElement, config: any): any;
+  setOption(option: string, value: any): void;
+  setValue(value: string): void;
+  save(): void;
+}
+
+declare global {
+  interface Window {
+    CodeMirror: CodeMirrorEditor;
+    editor: any;
+    roomId: string;
+    sharedContentId: string;
+    gpOptionsForm: HTMLFormElement;
+  }
+}
+
+// Go Playground setup
+let gpOriginal: GoPlayground, gpTip: GoPlayground, gp: GoPlayground;
+
+function initGoPlayground(): void {
   gpOriginal = new GoPlayground();
   gpTip = new GoPlayground("https://gotipplay.golang.org");
   gp = gpOriginal;
 }
 
 // CodeMirror editor setup
-const gpBody = document.getElementById("gpBody");
-const editor = CodeMirror.fromTextArea(gpBody, {
+const gpBody = document.getElementById("gpBody") as HTMLTextAreaElement;
+const editor = window.CodeMirror.fromTextArea(gpBody, {
   lineNumbers: true,
   mode: "text/x-go",
   tabSize: 8,
@@ -28,28 +65,28 @@ const editor = CodeMirror.fromTextArea(gpBody, {
 window.editor = editor;
 
 // Options management
-const optionsStr = window.localStorage.getItem("goplayground-options");
-const optionKeys = ["goimports", "vimMode", "tabSize"];
-const defaultOptions = {
+const optionsStr: string | null = window.localStorage.getItem("goplayground-options");
+const optionKeys: (keyof GoPlaygroundOptions)[] = ["goimports", "vimMode", "tabSize"];
+const defaultOptions: GoPlaygroundOptions = {
   goimports: false,
   vimMode: false,
   tabSize: 8,
 };
-const parsedOptions = JSON.parse(optionsStr) || {};
-const options =
+const parsedOptions: Partial<GoPlaygroundOptions> = optionsStr ? JSON.parse(optionsStr) : {};
+const options: GoPlaygroundOptions =
   optionKeys.length === Object.keys(parsedOptions).length
-    ? parsedOptions
+    ? parsedOptions as GoPlaygroundOptions
     : defaultOptions;
 
 // DOM elements
-const gpResult = document.getElementById("gpResult");
-const gpOptions = document.getElementById("gpOptions");
-const gpRunBtn = document.getElementById("gpRunBtn");
-const gpFmtBtn = document.getElementById("gpFmtBtn");
-const gpShareBtn = document.getElementById("gpShareBtn");
+const gpResult = document.getElementById("gpResult") as HTMLDivElement;
+const gpOptions = document.getElementById("gpOptions") as HTMLDivElement;
+const gpRunBtn = document.getElementById("gpRunBtn") as HTMLButtonElement;
+const gpFmtBtn = document.getElementById("gpFmtBtn") as HTMLButtonElement;
+const gpShareBtn = document.getElementById("gpShareBtn") as HTMLButtonElement;
 
 // Utility functions
-const createLine = (kind, message) => {
+const createLine = (kind: string, message: string): HTMLDivElement => {
   const line = document.createElement("div");
   line.classList.add("line");
   line.classList.add(kind);
@@ -57,7 +94,7 @@ const createLine = (kind, message) => {
   return line;
 };
 
-const createLink = (url) => {
+const createLink = (url: string): HTMLDivElement => {
   const div = document.createElement("div");
   const link = document.createElement("a");
   link.textContent = url;
@@ -70,11 +107,11 @@ const createLink = (url) => {
 const waitingMsg = "Waiting for remote server...";
 
 // Go Playground functions
-async function executeRun() {
+async function executeRun(): Promise<void> {
   if (!gp) return;
   editor.save();
   gpResult.textContent = waitingMsg;
-  const result = await gp.compile(gpBody.value);
+  const result: GoPlaygroundResult = await gp.compile(gpBody.value);
   gpResult.textContent = "";
   if (result.Errors !== "") {
     const line = createLine("stderr", result.Errors);
@@ -94,11 +131,11 @@ Program exited.`
   );
 }
 
-async function executeFmt() {
+async function executeFmt(): Promise<void> {
   if (!gp) return;
   editor.save();
   gpResult.textContent = waitingMsg;
-  const result = await gp.format(gpBody.value, options.goimports);
+  const result: GoPlaygroundFormatResult = await gp.format(gpBody.value, options.goimports);
   gpResult.textContent = "";
   if (result.Error !== "") {
     const line = createLine("stderr", result.Error);
@@ -109,22 +146,22 @@ async function executeFmt() {
   editor.setValue(result.Body);
 }
 
-function genShareQuery(key) {
-  let query = `?p=${key}`;
-  if (options.gotip) {
-    query += "&gotip=on";
+function genShareQuery(key: string): string {
+  const query = `?p=${key}`;
+  if ((options as any).gotip) {
+    return query + "&gotip=on";
   }
   return query;
 }
 
-async function executeShare() {
+async function executeShare(): Promise<void> {
   if (!gp) return;
   editor.save();
   gpResult.textContent = waitingMsg;
-  const result = await gp.share(gpBody.value);
+  const result: string = await gp.share(gpBody.value);
   console.log({ result });
   gpResult.innerHTML = "";
-  gpResult.appendChild(createLink(`${gp.hostName}/p/${result}`));
+  gpResult.appendChild(createLink(`https://go.dev/play/p/${result}`));
 }
 
 // Event listeners for Go Playground
@@ -132,7 +169,7 @@ gpRunBtn.addEventListener("click", () => executeRun());
 gpFmtBtn.addEventListener("click", () => executeFmt());
 gpShareBtn.addEventListener("click", () => executeShare());
 
-window.addEventListener("keypress", (e) => {
+window.addEventListener("keypress", (e: KeyboardEvent) => {
   if (e.key === "Enter") {
     if (e.shiftKey) {
       e.preventDefault();
@@ -146,20 +183,20 @@ window.addEventListener("keypress", (e) => {
 });
 
 // Options functions
-function applyOptions() {
+function applyOptions(): void {
   editor.setOption("keyMap", options.vimMode ? "vim" : "default");
   editor.setOption("tabSize", options.tabSize);
   editor.setOption("indentUnit", options.tabSize);
 }
 
 // initialize gotipEnabled
-const urlParams = new URLSearchParams(window.location.search);
-let gotipEnabled = urlParams.get("v") === "gotip";
+const urlParams: URLSearchParams = new URLSearchParams(window.location.search);
+let gotipEnabled: boolean = urlParams.get("v") === "gotip";
 
-const goVersionSelect = document.getElementById("goVersion");
+const goVersionSelect = document.getElementById("goVersion") as HTMLSelectElement;
 goVersionSelect.value = gotipEnabled ? "gotip" : "gorelease";
 
-function applyGotipOption() {
+function applyGotipOption(): void {
   const urlParams = new URLSearchParams(window.location.search);
   if (gotipEnabled) {
     urlParams.set("v", "gotip");
@@ -168,8 +205,8 @@ function applyGotipOption() {
     urlParams.delete("v");
     gp = gpOriginal;
   }
-  const search = urlParams.toString();
-  const url = new URL(window.location.href);
+  const search: string = urlParams.toString();
+  const url: URL = new URL(window.location.href);
   if (search) {
     url.search = `?${search}`;
   } else {
@@ -183,33 +220,33 @@ goVersionSelect.addEventListener("change", () => {
   applyGotipOption();
 });
 
-function initOptionsForm() {
-  const gpOptionsForm = document.getElementById("gpOptionsForm");
+function initOptionsForm(): void {
+  const gpOptionsForm = document.getElementById("gpOptionsForm") as HTMLFormElement;
   window.gpOptionsForm = gpOptionsForm;
 
   for (const key of optionKeys) {
-    const input = gpOptionsForm[key];
+    const input = (gpOptionsForm as any)[key] as HTMLInputElement;
     const value = options[key];
     if (input.type === "checkbox") {
-      input.checked = value;
+      input.checked = value as boolean;
       continue;
     }
-    input.value = value;
+    input.value = value.toString();
   }
 
-  gpOptionsForm.addEventListener("submit", (e) => {
+  gpOptionsForm.addEventListener("submit", (e: Event) => {
     e.preventDefault();
     for (const key of optionKeys) {
-      const input = gpOptionsForm[key];
+      const input = (gpOptionsForm as any)[key] as HTMLInputElement;
       if (input.type === "checkbox") {
-        options[key] = input.checked;
+        (options as any)[key] = input.checked;
         continue;
       }
       if (input.type === "number") {
-        options[key] = parseInt(input.value);
+        (options as any)[key] = parseInt(input.value);
         continue;
       }
-      options[key] = input.value;
+      (options as any)[key] = input.value;
     }
     applyOptions();
     window.localStorage.setItem(
@@ -221,7 +258,7 @@ function initOptionsForm() {
   applyOptions();
 }
 
-const gpOptionsBtn = document.getElementById("gpOptionsBtn");
+const gpOptionsBtn = document.getElementById("gpOptionsBtn") as HTMLButtonElement;
 gpOptionsBtn.addEventListener("click", () => {
   const closedLabel = "Options";
   const openedLabel = "Hide Options";
@@ -237,10 +274,10 @@ gpOptionsBtn.addEventListener("click", () => {
 });
 
 // Yjs collaborative editing setup
-function initCollaborativeEditing() {
+function initCollaborativeEditing(): void {
   // Get room information from global variables set in template
-  const roomId = window.roomId;
-  const sharedContentId = window.sharedContentId;
+  const roomId: string = window.roomId;
+  const sharedContentId: string = window.sharedContentId;
   
   if (!roomId) {
     console.log('No roomId found, skipping collaborative editing setup');
@@ -248,11 +285,11 @@ function initCollaborativeEditing() {
   }
 
   // yjs collaborative editing setup
-  const ydoc = new Y.Doc();
-  const wsUrl = `ws://${window.location.hostname}:1234/ws?room=${roomId}`;
-  const provider = new WebsocketProvider(wsUrl, roomId, ydoc);
-  const ytext = ydoc.getText('codemirror');
-  const binding = new CodemirrorBinding(ytext, editor, provider.awareness);
+  const ydoc: Y.Doc = new Y.Doc();
+  const wsUrl: string = `ws://${window.location.hostname}:1234/ws?room=${roomId}`;
+  const provider: WebsocketProvider = new WebsocketProvider(wsUrl, roomId, ydoc);
+  const ytext: Y.Text = ydoc.getText('codemirror');
+  const binding: CodemirrorBinding = new CodemirrorBinding(ytext, editor, provider.awareness);
 
   // Set up awareness (cursor sharing)
   provider.awareness.setLocalStateField('user', {
@@ -270,7 +307,7 @@ function initCollaborativeEditing() {
 }
 
 // Initialize everything when DOM is loaded
-function init() {
+function init(): void {
   initGoPlayground();
   applyGotipOption();
   initOptionsForm();

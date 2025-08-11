@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './web/room.js',
+  entry: './web/room.ts',
   output: {
     path: path.resolve(__dirname, 'public/dist'),
     filename: 'room.bundle.js',
@@ -10,6 +10,16 @@ module.exports = {
   mode: 'development',
   module: {
     rules: [
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            configFile: 'tsconfig.client.json'
+          }
+        }
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -24,6 +34,7 @@ module.exports = {
   },
   devtool: 'source-map',
   resolve: {
+    extensions: ['.ts', '.js'],
     fallback: {
       "crypto": false,
       "stream": false,
