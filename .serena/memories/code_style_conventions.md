@@ -1,68 +1,53 @@
-# Code Style and Conventions for gpgsync
+# Code Style and Conventions
 
-## JavaScript/Node.js Conventions
+## TypeScript Configuration
+### Server-side (tsconfig.json)
+- **Module System**: ES modules ("module": "nodenext", "target": "esnext")
+- **Strict Mode**: Enabled with additional strict checks
+- **File Extensions**: Uses .ts extensions with rewriteRelativeImportExtensions
+- **Import Style**: Explicit .ts extensions in imports (e.g., `import { app } from "./app/server.ts"`)
 
-### Code Style Observations
-Based on the existing codebase analysis:
+### Client-side (tsconfig.client.json) 
+- Separate config for webpack bundling
+- React JSX support enabled
 
-#### File Naming
-- Use kebab-case for file names: `editor-socketio-server.js`
-- Directory names are lowercase: `app`, `lib`, `views`, `public`
-- Templates use `.ejs` extension for EJS templates
+## Code Style Patterns
+### Import/Export Conventions
+- **ES Modules**: All files use `import`/`export` syntax
+- **File Extensions**: Always include `.ts` in relative imports
+- **Named Exports**: Prefer named exports over default exports
+- **Example**:
+  ```typescript
+  import { app } from "./app/server.ts";
+  import express from "express"; // External modules without extension
+  ```
 
-#### JavaScript Style
-- **Modules**: Uses CommonJS (`require`/`module.exports`) pattern
-- **Semicolons**: Consistently used at end of statements
-- **Quotes**: Uses double quotes for strings
-- **Indentation**: Appears to use 2 spaces (standard Node.js convention)
-- **Variable declarations**: Uses `const` for constants, appropriate scoping
+### Variable and Function Naming
+- **camelCase**: For variables, functions, and methods
+- **PascalCase**: For classes and interfaces
+- **SCREAMING_SNAKE_CASE**: For constants
+- **Examples**:
+  ```typescript
+  const expressPort = process.env.PORT || 8080;
+  const homeHandler = (req: Request, res: Response): void => { };
+  class YjsWebSocketServer { }
+  ```
 
-#### Module Structure
-```javascript
-// Import dependencies at the top
-const express = require("express");
-const { someFunction } = require("./module");
+### File Naming
+- **kebab-case**: For file names (e.g., `yjs-websocket-server.ts`)
+- **Descriptive**: Names clearly indicate purpose
 
-// Main logic
-const someVariable = value;
-
-// Export at the bottom
-module.exports = { exportedItem };
-```
-
-#### Express.js Patterns
-- Handlers are separated into dedicated files (`app/handlers.js`)
-- Middleware functions in separate file (`app/middlewares.js`)
-- Validation logic separated (`app/validators.js`)
-- Constants defined in separate file (`app/consts.js`)
-
-### File Organization
-- **app/**: Core application logic and Express setup
-- **lib/**: Reusable library modules
-- **views/**: EJS templates
-- **public/**: Static assets (CSS, JS, images)
-- **Root level**: Entry point and configuration files
-
-### Dependencies Management
-- Uses **pnpm** as package manager (evidenced by pnpm-lock.yaml)
-- Dependencies are clearly separated from devDependencies in package.json
-- Specific version pinning for critical dependencies
+### Type Annotations
+- **Explicit Types**: Function parameters and return types are explicitly typed
+- **Interface Definitions**: Used for complex object structures
+- **Strict Null Checks**: Enabled in TypeScript config
 
 ### Error Handling
-- Dedicated error handling module (`app/errors.js`)
-- Express error handling middleware
+- **Async/Await**: Preferred over promises for async operations
+- **Error Middleware**: Centralized error handling in Express
+- **Graceful Shutdown**: Proper cleanup for server resources
 
-## No Established Guidelines Yet
-**Note**: The project doesn't have:
-- ESLint configuration
-- Prettier configuration  
-- Formal coding standards document
-- TypeScript (uses plain JavaScript)
-- Automated code formatting
-- Documentation generation tools
-
-## Recommendations for Future Development
-- Consider adding ESLint for code consistency
-- Add Prettier for automatic formatting
-- Implement unit testing framework
-- Add JSDoc comments for better documentation
+### Architecture Patterns
+- **Single Responsibility**: Each file has a clear, focused purpose
+- **Separation of Concerns**: Clear distinction between routes, handlers, middleware
+- **Dependency Injection**: Configuration passed through function parameters

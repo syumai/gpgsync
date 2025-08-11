@@ -1,78 +1,53 @@
-# Architecture Details for gpgsync
+# Architecture Details
 
-## Core Architecture
-
-### Real-Time Collaboration System
-- **Operational Transformation (OT)**: Uses ot.js library for conflict-free collaborative editing
-- **WebSocket Communication**: Socket.IO for real-time bidirectional communication
-- **Room-Based Architecture**: Users join specific rooms identified by unique room IDs
-
-### Key Components
-
-#### 1. Server Layer (`app/server.js`)
-- Express.js application setup
-- Static file serving from `public/` directory
-- EJS template engine configuration
-- Socket.IO server integration
-- Route registration and middleware setup
-
-#### 2. Request Handlers (`app/handlers.js`)
-- `homeHandler`: Serves the landing page
-- `roomHandler`: Serves the collaborative room interface  
-- `ioServerHandler`: Manages Socket.IO server lifecycle for rooms
-- Integration with GoPlayground API for code execution
-
-#### 3. Real-Time Editor (`lib/editor-socketio-server.js`)
-- Manages operational transformation for collaborative editing
-- Handles client connections and disconnections
-- Synchronizes document state across all connected clients
-- Maintains server-side document state
-
-#### 4. Client-Side Assets
-- **Public Assets**: CSS and JavaScript files for UI
-- **Templates**: EJS templates for server-side rendering
-- **Client-Side OT**: JavaScript implementation for real-time collaboration
-
-### Data Flow
-
+## Project Structure
 ```
-Client Browser
-    ↓ HTTP Request (room creation/joining)
-Express Server (app/server.js)
-    ↓ Route handling
-Request Handlers (app/handlers.js)
-    ↓ Template rendering
-EJS Templates (views/*.ejs)
-    ↓ WebSocket connection
-Socket.IO Server
-    ↓ OT operations
-Editor Server (lib/editor-socketio-server.js)
-    ↓ Go code execution
-GoPlayground API (@syumai/goplayground-node)
+gpgsync/
+├── server.ts                 # Main server entry point
+├── app/                      # Backend application code
+│   ├── server.ts            # Express app configuration
+│   ├── handlers.ts          # Route handlers (home, room)
+│   ├── middlewares.ts       # Express middleware
+│   ├── validators.ts        # Input validation
+│   ├── errors.ts           # Error definitions
+│   ├── consts.ts           # Constants
+│   └── yjs-websocket-server.ts # Yjs WebSocket server
+├── web/                     # Frontend TypeScript code
+│   └── room.ts             # Client-side room functionality
+├── public/                  # Static assets
+├── views/                   # EJS templates
+├── webpack.config.js        # Frontend build configuration
+├── tsconfig.json           # Server-side TypeScript config
+├── tsconfig.client.json    # Client-side TypeScript config
+└── package.json            # Dependencies and scripts
 ```
 
-### Integration Points
+## Server Architecture
+The application runs two servers concurrently:
 
-#### Go Playground Integration
-- Uses `@syumai/goplayground-node` package
-- Supports shared content IDs from official Go Playground
-- Allows importing and executing Go code
-- URL format: `/rooms/:roomId/p/:sharedContentId`
+### 1. Express Server (HTTP)
+- **Port**: 8080 (default) or PORT env var
+- **Purpose**: Serves web interface and handles HTTP routes
+- **Routes**:
+  - `/` - Home page
+  - `/p/:sharedContentId` - Home with pre-loaded Go Playground content
+  - `/rooms/:roomId` - Collaborative room
+  - `/rooms/:roomId/p/:sharedContentId` - Room with pre-loaded content
 
-#### Socket.IO Room Management
-- Each collaborative session is a Socket.IO room
-- Server maintains a map of active editor servers per room
-- Automatic cleanup of inactive rooms
-- Real-time synchronization of cursor positions and text changes
+### 2. Yjs WebSocket Server
+- **Port**: 1234 (default) or YJS_PORT env var  
+- **Purpose**: Handles real-time collaborative editing
+- **Technology**: y-websocket with custom YjsWebSocketServer class
 
-### Security Considerations
-- Room ID validation to prevent injection attacks
-- Input sanitization for shared content IDs
-- Error boundaries to prevent server crashes
-- No authentication system (open access model)
+## Request Flow
+1. User accesses room URL via Express server
+2. Client connects to Yjs WebSocket server for real-time collaboration
+3. Collaborative editing state synchronized via Yjs operations
+4. Go code execution handled via @syumai/goplayground-node API
 
-### Scalability Notes
-- In-memory state storage (not persistent across restarts)
-- Single-server deployment model
-- Room-based horizontal partitioning possible
-- No database layer - all state is ephemeral
+## Key Design Patterns
+- **ES Modules**: Entire codebase uses ES modules with .ts extensions
+- **Dual Server Architecture**: Separate HTTP and WebSocket servers
+- **TypeScript**: Strict typing throughout with modern features
+- **Graceful Shutdown**: Proper cleanup handling for both servers
+- **Error Handling**: Centralized middleware for HTTP errors

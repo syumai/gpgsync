@@ -1,62 +1,84 @@
-# Suggested Commands for gpgsync Development
+# Suggested Commands
 
-## Essential Development Commands
+## Development Workflow
 
 ### Package Management
 ```bash
 # Install dependencies (uses pnpm)
 pnpm install
 
-# Note: The project uses pnpm as indicated by pnpm-lock.yaml
+# Add new dependency
+pnpm add <package-name>
+
+# Add dev dependency  
+pnpm add -D <package-name>
+
+# Remove dependency
+pnpm remove <package-name>
 ```
 
-### Running the Application
+### Development Server
 ```bash
-# Start the server (development)
-node server.js
-# Server runs on http://localhost:8080 by default
-# Uses PORT environment variable if set
+# Start the main application (both Express and Yjs servers)
+node server.ts
+# Runs Express server on http://localhost:8080
+# Runs Yjs WebSocket server on ws://localhost:1234/ws
+```
 
-# Alternative using npm (if npm scripts are added)
-npm start
+### Build Commands
+```bash
+# Build frontend for production
+npm run build
+# Equivalent to: webpack --mode production
+
+# Build frontend for development  
+npm run dev
+# Equivalent to: webpack --mode development --watch
+
+# Serve frontend with webpack dev server
+npm run serve
+# Equivalent to: webpack serve --mode development
 ```
 
 ### Deployment
 ```bash
-# Deploy to Heroku (using Makefile)
+# Deploy to Heroku
 make deploy
-# This runs: git push heroku main
+# Equivalent to: git push heroku main
 ```
 
-### System Commands (macOS/Darwin)
+### Development Utilities
 ```bash
-# File operations
-ls -la                 # List files with details
-find . -name "*.js"    # Find JavaScript files
-grep -r "pattern" .    # Search for patterns in files
+# TypeScript compilation check
+npx tsc --noEmit
+
+# Check client-side TypeScript
+npx tsc --noEmit -p tsconfig.client.json
 
 # Git operations
-git status            # Check repository status
-git add .             # Stage changes
-git commit -m "msg"   # Commit changes
-git push origin main  # Push to main branch
-git push heroku main  # Deploy to Heroku
+git status
+git add .
+git commit -m "commit message"
+git push origin main
 ```
 
-### Development Workflow
+### macOS System Commands (Darwin)
 ```bash
-# 1. Make changes to code
-# 2. Test locally with: node server.js
-# 3. Check git status: git status
-# 4. Stage changes: git add .
-# 5. Commit: git commit -m "description"
-# 6. Deploy: make deploy
+# File operations
+ls -la              # List files with details
+find . -name "*.ts" # Find TypeScript files
+grep -r "pattern"   # Search in files
+tree               # Show directory structure
+
+# Process management
+ps aux | grep node  # Find Node.js processes
+lsof -i :8080      # Check what's using port 8080
 ```
 
-## Port Configuration
-- Default: 8080
-- Environment variable: PORT
-- Production (Heroku): Uses dynamic port assignment
-
-## No Testing/Linting Commands
-**Note**: The project currently has minimal npm scripts. The package.json only contains a placeholder test script that exits with an error. No linting, formatting, or testing commands are configured yet.
+## Important Notes
+- **No Testing Framework**: Currently no test commands configured (package.json test script exits with error)
+- **No Linting**: No ESLint or other linting tools configured
+- **No Formatting**: No Prettier or other formatting tools configured
+- **Environment Variables**: 
+  - `PORT` - Express server port (default: 8080)
+  - `YJS_PORT` - Yjs WebSocket server port (default: 1234)

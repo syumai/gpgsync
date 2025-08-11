@@ -1,69 +1,52 @@
-# Task Completion Workflow for gpgsync
+# Task Completion Workflow
 
-## When a Development Task is Completed
+## Pre-Development Setup
+1. **Install Dependencies**: Run `pnpm install` if package.json has changed
+2. **Check TypeScript**: Run `npx tsc --noEmit` to verify server-side types
+3. **Check Client TypeScript**: Run `npx tsc --noEmit -p tsconfig.client.json` for client types
 
-### Current State Assessment
-The project currently has **minimal automation** for task completion verification:
-- No linting commands configured
-- No automated testing (package.json test script just exits with error)
-- No formatting tools set up
-- No type checking (plain JavaScript, no TypeScript)
+## Development Process
+1. **Start Development Server**: Run `node server.ts` to start both servers
+2. **Frontend Development**: Use `npm run dev` for automatic webpack rebuilds
+3. **Test in Browser**: Access `http://localhost:8080` to test changes
 
-### Recommended Completion Steps
+## Code Quality Checks
+⚠️ **Important**: This project currently has NO automated testing, linting, or formatting tools configured.
 
-#### 1. Manual Testing
-```bash
-# Start the server and test manually
-node server.js
-# Test in browser at http://localhost:8080
-# Verify core functionality:
-# - Home page loads
-# - Room creation works
-# - Real-time collaboration functions
-# - Go code execution works
-```
+### Manual Quality Checks
+1. **TypeScript Compilation**: 
+   - Server: `npx tsc --noEmit`
+   - Client: `npx tsc --noEmit -p tsconfig.client.json`
+2. **Build Verification**: `npm run build` should complete without errors
+3. **Manual Testing**: Test application functionality in browser
+4. **Code Review**: Manually review code for:
+   - TypeScript type safety
+   - ES module import/export consistency
+   - Error handling
+   - Proper async/await usage
 
-#### 2. Code Review Checklist
-- [ ] Follow existing code style (2-space indentation, double quotes)
-- [ ] Use CommonJS module pattern (`require`/`module.exports`)
-- [ ] Separate concerns (handlers, middleware, validators in separate files)
-- [ ] Handle errors appropriately
-- [ ] Update documentation if needed
+## Pre-Commit Checklist
+- [ ] TypeScript compiles without errors (both server and client)
+- [ ] Webpack build succeeds (`npm run build`)
+- [ ] Application starts without errors (`node server.ts`)
+- [ ] Manual testing of affected functionality
+- [ ] Code follows project conventions (ES modules, .ts extensions)
 
-#### 3. Git Workflow
-```bash
-# Check what changed
-git status
-git diff
+## Deployment Workflow
+1. **Build Production Assets**: `npm run build`
+2. **Commit Changes**: Standard git workflow
+3. **Deploy**: `make deploy` (pushes to Heroku)
 
-# Stage and commit changes
-git add .
-git commit -m "descriptive commit message"
+## Recommendations for Improvement
+The following tools should be considered for future implementation:
+- **Testing**: Jest, Vitest, or similar testing framework
+- **Linting**: ESLint with TypeScript support
+- **Formatting**: Prettier with TypeScript support  
+- **Pre-commit Hooks**: husky + lint-staged
+- **CI/CD**: GitHub Actions for automated testing and deployment
 
-# For deployment
-make deploy  # Pushes to Heroku
-```
-
-#### 4. Manual Integration Testing
-Since there are no automated tests, perform these manual checks:
-- [ ] Server starts without errors
-- [ ] Home page accessible and functional
-- [ ] Room creation and joining works
-- [ ] Real-time editing synchronization works
-- [ ] Go code execution through playground integration works
-- [ ] No console errors in browser developer tools
-
-### Future Improvements Needed
-The project would benefit from adding:
-- ESLint for code quality checks
-- Jest or Mocha for automated testing
-- Prettier for code formatting
-- GitHub Actions or similar for CI/CD
-- Unit tests for handlers and utilities
-- Integration tests for Socket.IO functionality
-
-### Deployment Verification
-After deploying to Heroku:
-- [ ] Visit https://gpgsync.herokuapp.com
-- [ ] Test basic functionality in production
-- [ ] Check Heroku logs for any deployment issues: `heroku logs --tail`
+## Error Handling
+- Server errors are logged to console
+- Both servers have graceful shutdown handlers (SIGTERM, SIGINT)
+- Uncaught exceptions and unhandled rejections trigger server shutdown
+- Express has centralized error handling middleware
