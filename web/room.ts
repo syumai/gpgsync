@@ -286,7 +286,7 @@ function initCollaborativeEditing(): void {
 
   // yjs collaborative editing setup
   const ydoc: Y.Doc = new Y.Doc();
-  const wsUrl: string = `ws://${window.location.hostname}:1234/ws?room=${roomId}`;
+  const wsUrl: string = `ws://${window.location.hostname}:8136/ws?room=${roomId}`;
   const provider: WebsocketProvider = new WebsocketProvider(wsUrl, roomId, ydoc);
   const ytext: Y.Text = ydoc.getText('codemirror');
   const binding: CodemirrorBinding = new CodemirrorBinding(ytext, editor, provider.awareness);

@@ -60,7 +60,7 @@ class YjsWebSocketServer {
   private roomManager: RoomManager;
   private port: number;
 
-  constructor(port: number = 1234) {
+  constructor(port: number = 8136) {
     this.port = port;
     this.roomManager = new YjsRoomManager();
     this.server = http.createServer();

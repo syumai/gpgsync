@@ -18,7 +18,7 @@ pnpm install
 # Start the development server (both Express and Yjs WebSocket servers)
 node server.ts
 # Express server runs on http://localhost:8080 (or PORT env var)
-# Yjs WebSocket server runs on ws://localhost:1234/ws (or YJS_PORT env var)
+# Yjs WebSocket server runs on ws://localhost:8136/ws (or YJS_PORT env var)
 ```
 
 ### Frontend Development
@@ -65,7 +65,7 @@ The application runs two concurrent servers:
 2. **Yjs WebSocket Server** (`app/yjs-websocket-server.ts`):
    - Real-time collaborative editing server
    - WebSocket-based communication using y-websocket
-   - Port: 1234 (default) or YJS_PORT environment variable
+   - Port: 8136 (default) or YJS_PORT environment variable
 
 ### Request Flow
 1. User accesses room URL via Express server
