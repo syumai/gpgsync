@@ -9,7 +9,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
-    "serve": "webpack serve --mode development"
+    "serve": "webpack serve --mode development",
+    "wrangler:dev": "wrangler dev",
+    "wrangler:deploy": "wrangler deploy",
+    "wrangler:types": "wrangler types",
+    "cf:dev": "npm run build && wrangler dev",
+    "cf:deploy": "npm run build && wrangler deploy"
   },
   "repository": {
     "type": "git",
@@ -29,9 +34,11 @@
     "@syumai/goplayground-node": "^0.1.8",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "hono": "^4.7.11",
     "lib0": "^0.2.114",
     "ws": "^8.18.3",
     "y-codemirror": "^3.0.1",
+    "y-durableobjects": "^0.2.0",
     "y-protocols": "^1.0.6",
     "y-websocket": "^3.0.0",
     "yjs": "^13.6.27"
@@ -39,6 +46,7 @@
   "devDependencies": {
     "@babel/core": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
+    "@cloudflare/workers-types": "^4.20241218.0",
     "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.3",
     "@types/node": "^24.2.1",
@@ -47,6 +55,7 @@
     "ts-loader": "^9.5.2",
     "typescript": "^5.9.2",
     "webpack": "^5.101.0",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^6.0.1",
+    "wrangler": "^4.28.1"
   }
 }

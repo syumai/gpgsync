@@ -1,0 +1,28 @@
+name = "gpgsync"
+main = "src/worker.ts"
+compatibility_date = "2024-12-18"
+compatibility_flags = ["nodejs_compat"]
+
+# Development configuration
+[vars]
+ENVIRONMENT = "development"
+
+# Static assets configuration
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# Durable Objects bindings
+[durable_objects]
+bindings = [
+  { name = "GPGSYNC_ROOMS", class_name = "GPGSyncDurableObject" }
+]
+
+# Durable Objects migrations
+[[migrations]]
+tag = "v1"
+new_classes = ["GPGSyncDurableObject"]
+
+# Build configuration
+[build]
+command = "npm run build"

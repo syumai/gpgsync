@@ -286,7 +286,12 @@ function initCollaborativeEditing(): void {
 
   // yjs collaborative editing setup
   const ydoc: Y.Doc = new Y.Doc();
-  const wsUrl: string = `ws://${window.location.hostname}:8136/ws?room=${roomId}`;
+  // y-websocket creates URL as: baseUrl + '/' + roomname
+  // So for /yjs/roomId, we need baseUrl='/yjs' and roomname=roomId
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl: string = `${protocol}//${window.location.host}/yjs`;
+  
+  // This will create WebSocket connection to: /yjs/roomId (correct format)
   const provider: WebsocketProvider = new WebsocketProvider(wsUrl, roomId, ydoc);
   const ytext: Y.Text = ydoc.getText('codemirror');
   const binding: CodemirrorBinding = new CodemirrorBinding(ytext, editor, provider.awareness);
@@ -300,7 +305,23 @@ function initCollaborativeEditing(): void {
   // Load shared content if provided
   if (sharedContentId && sharedContentId.trim() !== '') {
     console.log(`Loading shared content: ${sharedContentId}`);
-    // The server will handle loading shared content
+    
+    // Wait for provider to be connected before sending load request
+    provider.on('status', (event: { status: string }) => {
+      if (event.status === 'connected') {
+        // Send message to Durable Object to load shared content
+        const loadMessage = JSON.stringify({
+          type: 'load-shared-content',
+          sharedContentId: sharedContentId
+        });
+        
+        // Get the WebSocket from the provider and send the custom message
+        const ws = (provider as any).ws;
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(loadMessage);
+        }
+      }
+    });
   }
 
   console.log('yjs collaborative editing initialized');
