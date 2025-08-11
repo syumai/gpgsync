@@ -1,6 +1,7 @@
+import type { Request, Response, NextFunction } from "express";
 const { InvalidArgumentError, APIError } = require("./errors.ts");
 
-const invalidURIValidatorHandler = (req, res, next) => {
+const invalidURIValidatorHandler = (req: Request, res: Response, next: NextFunction): void => {
   let err;
   try {
     decodeURIComponent(req.path);
@@ -14,7 +15,7 @@ const invalidURIValidatorHandler = (req, res, next) => {
   next();
 };
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {
   if (res.headersSent) return next(err);
   if (err instanceof APIError) {
     if (err.code !== 400) {

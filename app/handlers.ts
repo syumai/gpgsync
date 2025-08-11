@@ -1,3 +1,5 @@
+import type { Request, Response } from "express";
+import type { Socket } from "socket.io";
 const path = require("path");
 const EditorSocketIOServer = require("../lib/editor-socketio-server.ts");
 const { helloWorld } = require("./consts.ts");
@@ -10,7 +12,7 @@ const {
 const gp = new GoPlayground();
 const viewRootPath = path.join(__dirname, "../views");
 
-const homeHandler = (req, res) => {
+const homeHandler = (req: Request, res: Response): void => {
   const { sharedContentId } = req.params;
   if (sharedContentId) {
     validateSharedContentIdLength(sharedContentId);
@@ -20,7 +22,7 @@ const homeHandler = (req, res) => {
   });
 };
 
-const roomHandler = (req, res) => {
+const roomHandler = (req: Request, res: Response): void => {
   const { roomId, sharedContentId } = req.params;
   validateRoomId(roomId);
   if (sharedContentId) {
@@ -32,10 +34,10 @@ const roomHandler = (req, res) => {
   });
 };
 
-const ioServerMap = new Map();
+const ioServerMap = new Map<string, any>();
 
-const ioServerHandler = (socket) => {
-  socket.on("join", async (data) => {
+const ioServerHandler = (socket: Socket): void => {
+  socket.on("join", async (data: any) => {
     const { docId, sharedContentId } = data;
     if (!docId) {
       return;

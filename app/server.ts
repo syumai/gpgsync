@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const http = require("http");
-const socketio = require("socket.io");
+const { Server: SocketIOServer } = require("socket.io");
 const { homeHandler, roomHandler, ioServerHandler } = require("./handlers.ts");
 const { invalidURIValidatorHandler, errorHandler } = require("./middlewares.ts");
 
@@ -12,7 +12,7 @@ const publicPath = path.join(__dirname, "../public");
  */
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server, {
+const io = new SocketIOServer(server, {
   maxHttpBufferSize: 1e6, // 1MB
 });
 

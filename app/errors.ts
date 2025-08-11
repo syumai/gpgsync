@@ -1,12 +1,14 @@
 class APIError extends Error {
-  constructor(code, message) {
+  code: number;
+
+  constructor(code: number, message: string) {
     super(message);
     this.code = code;
   }
 }
 
 class InvalidArgumentError extends APIError {
-  constructor(message) {
+  constructor(message: string) {
     super(400, "Invalid Argument: " + message);
   }
 }

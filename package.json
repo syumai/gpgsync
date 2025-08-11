@@ -28,6 +28,9 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.2.1",
     "typescript": "^5.9.2"
   }
 }
