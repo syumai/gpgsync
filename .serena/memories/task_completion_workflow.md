@@ -1,52 +1,76 @@
 # Task Completion Workflow
 
-## Pre-Development Setup
-1. **Install Dependencies**: Run `pnpm install` if package.json has changed
-2. **Check TypeScript**: Run `npx tsc --noEmit` to verify server-side types
-3. **Check Client TypeScript**: Run `npx tsc --noEmit -p tsconfig.client.json` for client types
+## Quality Checks Before Completion
 
-## Development Process
-1. **Start Development Server**: Run `node server.ts` to start both servers
-2. **Frontend Development**: Use `npm run dev` for automatic webpack rebuilds
-3. **Test in Browser**: Access `http://localhost:8080` to test changes
+### TypeScript Compilation
+Always run TypeScript checks for the relevant parts of the codebase:
+```bash
+# Server-side code
+npx tsc --noEmit
 
-## Code Quality Checks
-⚠️ **Important**: This project currently has NO automated testing, linting, or formatting tools configured.
+# Client-side code  
+npx tsc --noEmit -p tsconfig.client.json
 
-### Manual Quality Checks
-1. **TypeScript Compilation**: 
-   - Server: `npx tsc --noEmit`
-   - Client: `npx tsc --noEmit -p tsconfig.client.json`
-2. **Build Verification**: `npm run build` should complete without errors
-3. **Manual Testing**: Test application functionality in browser
-4. **Code Review**: Manually review code for:
-   - TypeScript type safety
-   - ES module import/export consistency
-   - Error handling
-   - Proper async/await usage
+# Cloudflare Worker code
+npx tsc --noEmit -p tsconfig.worker.json
+```
 
-## Pre-Commit Checklist
-- [ ] TypeScript compiles without errors (both server and client)
-- [ ] Webpack build succeeds (`npm run build`)
-- [ ] Application starts without errors (`node server.ts`)
-- [ ] Manual testing of affected functionality
-- [ ] Code follows project conventions (ES modules, .ts extensions)
+### Build Verification
+```bash
+# Frontend build
+npm run build
 
-## Deployment Workflow
-1. **Build Production Assets**: `npm run build`
-2. **Commit Changes**: Standard git workflow
-3. **Deploy**: `make deploy` (pushes to Heroku)
+# Development build (with watch)
+npm run dev
+```
 
-## Recommendations for Improvement
-The following tools should be considered for future implementation:
-- **Testing**: Jest, Vitest, or similar testing framework
-- **Linting**: ESLint with TypeScript support
-- **Formatting**: Prettier with TypeScript support  
-- **Pre-commit Hooks**: husky + lint-staged
-- **CI/CD**: GitHub Actions for automated testing and deployment
+### Testing
+**Note**: The project currently has no automated testing framework configured. The test script is a placeholder that exits with an error.
 
-## Error Handling
-- Server errors are logged to console
-- Both servers have graceful shutdown handlers (SIGTERM, SIGINT)
-- Uncaught exceptions and unhandled rejections trigger server shutdown
-- Express has centralized error handling middleware
+### Manual Testing
+- Start the development server and verify functionality
+- Test collaborative editing features in multiple browser sessions
+- Verify Go code execution works properly
+- Check room creation and navigation
+
+## Deployment Verification
+
+### Cloudflare Workers (Current)
+```bash
+# Test locally first
+npm run wrangler:dev
+
+# Deploy when ready
+npm run wrangler:deploy
+```
+
+### Legacy Heroku
+```bash
+# Deploy via git
+make deploy
+```
+
+## No Linting/Formatting Tools
+The project currently does not have:
+- ESLint configuration
+- Prettier setup  
+- Automated formatting
+- Pre-commit hooks
+
+Code style should be maintained manually following the conventions in code_style_conventions.md.
+
+## Git Workflow
+Standard git practices:
+1. Create feature branch if needed
+2. Make changes
+3. Test thoroughly
+4. Commit with descriptive messages
+5. Push changes
+6. Deploy if authorized
+
+## Environment Testing
+Test in both development and production-like environments:
+- Local development server
+- Wrangler dev environment  
+- Deployed Cloudflare Workers
+- Legacy Heroku deployment (if still active)

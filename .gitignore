@@ -21,3 +21,6 @@ build/
 
 # Temp files
 tmp/
+
+# Wrangler
+.wrangler/

@@ -1,53 +1,45 @@
 # Code Style and Conventions
 
-## TypeScript Configuration
-### Server-side (tsconfig.json)
-- **Module System**: ES modules ("module": "nodenext", "target": "esnext")
-- **Strict Mode**: Enabled with additional strict checks
-- **File Extensions**: Uses .ts extensions with rewriteRelativeImportExtensions
-- **Import Style**: Explicit .ts extensions in imports (e.g., `import { app } from "./app/server.ts"`)
-
-### Client-side (tsconfig.client.json) 
-- Separate config for webpack bundling
-- React JSX support enabled
-
-## Code Style Patterns
-### Import/Export Conventions
+## Module System
 - **ES Modules**: All files use `import`/`export` syntax
-- **File Extensions**: Always include `.ts` in relative imports
-- **Named Exports**: Prefer named exports over default exports
-- **Example**:
-  ```typescript
-  import { app } from "./app/server.ts";
-  import express from "express"; // External modules without extension
-  ```
+- **File Extensions**: Use `.ts` extensions in relative imports
+- **Module Detection**: Forced in TypeScript config
+- **Verbatim Modules**: Disabled for flexibility
 
-### Variable and Function Naming
-- **camelCase**: For variables, functions, and methods
-- **PascalCase**: For classes and interfaces
-- **SCREAMING_SNAKE_CASE**: For constants
-- **Examples**:
-  ```typescript
-  const expressPort = process.env.PORT || 8080;
-  const homeHandler = (req: Request, res: Response): void => { };
-  class YjsWebSocketServer { }
-  ```
+## Naming Conventions
+- **Variables/Functions**: camelCase
+- **Classes**: PascalCase  
+- **Files**: kebab-case
+- **Constants**: camelCase (following modern TypeScript patterns)
 
-### File Naming
-- **kebab-case**: For file names (e.g., `yjs-websocket-server.ts`)
-- **Descriptive**: Names clearly indicate purpose
+## TypeScript Configuration
+- **Strict Mode**: Enabled across all configurations
+- **Target**: ESNext for modern features
+- **Module**: NodeNext for Node.js compatibility
+- **Null Checks**: Strict null checks enabled
+- **Index Access**: No unchecked indexed access
+- **Optional Properties**: Exact optional property types
+- **Source Maps**: Generated for debugging
+- **Declaration Maps**: Generated for type information
 
-### Type Annotations
-- **Explicit Types**: Function parameters and return types are explicitly typed
-- **Interface Definitions**: Used for complex object structures
-- **Strict Null Checks**: Enabled in TypeScript config
+## Error Handling
+- **Async/Await**: Preferred over Promise chains
+- **Centralized Middleware**: Express error handling in middlewares.ts
+- **Graceful Shutdown**: Implemented for server lifecycle
 
-### Error Handling
-- **Async/Await**: Preferred over promises for async operations
-- **Error Middleware**: Centralized error handling in Express
-- **Graceful Shutdown**: Proper cleanup for server resources
+## Code Organization
+- **Single Responsibility**: Each module has clear purpose
+- **Separation of Concerns**: Clear boundaries between layers
+- **Validation**: Centralized in validators.ts
+- **Error Types**: Defined in errors.ts
 
-### Architecture Patterns
-- **Single Responsibility**: Each file has a clear, focused purpose
-- **Separation of Concerns**: Clear distinction between routes, handlers, middleware
-- **Dependency Injection**: Configuration passed through function parameters
+## Import Style
+- Explicit .ts extensions in relative imports
+- ES module syntax throughout
+- Type imports when needed
+
+## Architecture Patterns
+- Functional programming style preferred
+- Immutable data structures where possible
+- Clear separation between business logic and framework code
+- Configuration-driven approach for different environments
