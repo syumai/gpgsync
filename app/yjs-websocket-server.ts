@@ -52,6 +52,7 @@ class YjsWebSocketServer {
   private wss: ws.WebSocketServer;
   private roomManager: YjsRoomManager;
   private port: number;
+  private roomConnections: Map<string, Set<ws.WebSocket>> = new Map();
 
   constructor(port: number = 8136) {
     this.port = port;
@@ -150,14 +151,40 @@ class YjsWebSocketServer {
       const doc = this.roomManager.getRoom(roomId);
       this.setupYjsConnection(ws, doc);
 
+      // Track connection for this room
+      if (!this.roomConnections.has(roomId)) {
+        this.roomConnections.set(roomId, new Set());
+      }
+      this.roomConnections.get(roomId)!.add(ws);
+
       ws.on('close', () => {
         console.log(`Client disconnected from room: ${roomId}`);
-        // Note: We don't auto-destroy rooms like the original
-        // yjs handles persistence better than manual cleanup
+        
+        // Remove connection from room tracking
+        const roomWs = this.roomConnections.get(roomId);
+        if (roomWs) {
+          roomWs.delete(ws);
+          
+          // If no more connections, destroy the room
+          if (roomWs.size === 0) {
+            this.roomConnections.delete(roomId);
+            this.roomManager.destroyRoom(roomId);
+          }
+        }
       });
 
       ws.on('error', (error) => {
         console.error('WebSocket error:', error);
+        
+        // Clean up connection tracking on error
+        const roomWs = this.roomConnections.get(roomId);
+        if (roomWs) {
+          roomWs.delete(ws);
+          if (roomWs.size === 0) {
+            this.roomConnections.delete(roomId);
+            this.roomManager.destroyRoom(roomId);
+          }
+        }
       });
     });
   }
