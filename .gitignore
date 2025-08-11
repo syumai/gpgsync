@@ -1,1 +1,20 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Environment files
+.env
+
+# Editor files
+.vscode/
+.idea/
+.DS_Store
+
+# Build outputs
+dist/
+build/
+
+# Serena cache
+.serena/cache/
