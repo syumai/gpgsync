@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 gpgsync is a collaborative real-time code editor based on The Go Playground. It allows multiple users to simultaneously edit Go code in shared rooms using Yjs for real-time collaboration and conflict-free collaborative editing.
 
-**Live demo**: https://gpgsync.herokuapp.com
+**Live demo**: https://gpgsync.syumai.workers.dev/
 
 ## Development Commands
 
