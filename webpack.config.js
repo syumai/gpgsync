@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/main.js',
+  entry: './web/room.js',
   output: {
     path: path.resolve(__dirname, 'public/dist'),
-    filename: 'bundle.js',
+    filename: 'room.bundle.js',
     clean: true,
   },
   mode: 'development',
