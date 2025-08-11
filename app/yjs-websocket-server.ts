@@ -73,7 +73,7 @@ class YjsWebSocketServer {
     this.setupWebSocketHandlers();
   }
 
-  private setupYjsConnection(ws: ws.WebSocket, doc: Y.Doc, roomId: string): void {
+  private setupYjsConnection(ws: ws.WebSocket, doc: Y.Doc): void {
     const awareness = new Awareness(doc);
     
     // Send sync step 1
@@ -90,7 +90,7 @@ class YjsWebSocketServer {
         switch (messageType) {
           case 0: // messageSync
             encoding.writeVarUint(encoder, 0);
-            const syncMessageType = syncProtocol.readSyncMessage(decoder, encoder, doc, null);
+            syncProtocol.readSyncMessage(decoder, encoder, doc, null);
             if (encoding.length(encoder) > 1) {
               ws.send(encoding.toUint8Array(encoder));
             }
@@ -155,7 +155,7 @@ class YjsWebSocketServer {
       console.log(`Client connected to room: ${roomId}`);
       
       const doc = this.roomManager.getRoom(roomId);
-      this.setupYjsConnection(ws, doc, roomId);
+      this.setupYjsConnection(ws, doc);
 
       ws.on('close', () => {
         console.log(`Client disconnected from room: ${roomId}`);

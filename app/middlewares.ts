@@ -15,7 +15,7 @@ const invalidURIValidatorHandler = (req: Request, res: Response, next: NextFunct
   next();
 };
 
-const errorHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {
+const errorHandler = (err: any, _req: Request, res: Response, next: NextFunction): void => {
   if (res.headersSent) return next(err);
   if (err instanceof APIError) {
     if (err.code !== 400) {
