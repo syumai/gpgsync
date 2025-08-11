@@ -1,5 +1,5 @@
 import { app } from "./app/server.ts";
-import { YjsWebSocketServer } from './lib/yjs-websocket-server.ts';
+import { YjsWebSocketServer } from './app/yjs-websocket-server.ts';
 
 const expressPort = process.env.PORT || 8080;
 const yjsPort = process.env.YJS_PORT ? parseInt(process.env.YJS_PORT) : 1234;
