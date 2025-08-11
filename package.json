@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "A multi-person editable version of The Go Playground.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,7 +13,7 @@
   },
   "author": "syumai",
   "engines": {
-    "node": "16.x"
+    "node": "22.x"
   },
   "license": "MIT",
   "bugs": {
@@ -21,10 +21,10 @@
   },
   "homepage": "https://github.com/syumai/gpgsync#readme",
   "dependencies": {
-    "@syumai/goplayground-node": "^0.1.7",
-    "ejs": "^3.1.5",
-    "express": "^4.17.1",
-    "ot": "git+https://github.com/Operational-Transformation/ot.js.git#master",
-    "socket.io": "^2.3.0"
+    "@syumai/goplayground-node": "^0.1.8",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "ot": "github:Operational-Transformation/ot.js#master",
+    "socket.io": "^4.8.1"
   }
 }
