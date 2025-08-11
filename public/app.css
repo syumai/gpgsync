@@ -1,6 +1,45 @@
 /* Original contents is available on https://github.com/syumai/go-playground-custom */
 
 /***
+ * yjs collaborative editing
+ * based on https://github.com/yjs/y-codemirror/blob/v3.0.1/demo/index.html
+ */
+
+ .remote-caret {
+  position: relative;
+  border-left: 2px solid black;
+  margin-left: -1px;
+  margin-right: -1px;
+  box-sizing: border-box;
+}
+.remote-caret > div {
+  white-space: nowrap;
+  position: absolute;
+  top: -1.05em;
+  left: -2px;
+  font-size: .8em;
+  background-color: rgb(250, 129, 0);
+  font-family: Menlo, monospace;
+  font-style: normal;
+  font-weight: normal;
+  line-height: normal;
+  user-select: none;
+  color: white;
+  padding-left: 3px;
+  padding-right: 3px;
+  z-index: 3;
+  transition: opacity .3s ease-in-out;
+}
+.remote-caret.hide-name > div {
+  transition-delay: .7s;
+  opacity: 0;
+}
+.remote-caret:hover > div {
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+/***
  * CodeMirror customization
  */
 
