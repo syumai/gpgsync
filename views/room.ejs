@@ -60,12 +60,36 @@
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.58.3/mode/go/go.js" integrity="sha256-Tgg9NnYSrp+/RdVXp/tw7yqwdONCRJNxfvavRgdjzdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.58.3/keymap/vim.js" integrity="sha256-3Vs/zwB+ju4BxOZ3amZj4qchA0O07FRuPntPcfYEQk8=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.58.3/addon/edit/matchbrackets.js" integrity="sha256-K7D6LI9nbO/+XqhfEDHcvOL0kIxYNfzn8aFynPOqDHY=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ot.js/0.0.15/ot-min.js" integrity="sha512-OZdsRdCJMHqCeo6OLoDnPxCEKW1R4xFFPr+IIlCicemt58vWMR26VQ6GwQEf/0qrpe7MuV8WVKhu5ExL1q34Rw==" crossorigin="anonymous"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
+  <script src="/app.js" type="module"></script>
+  <script type="module">
+    import * as Y from "https://cdn.jsdelivr.net/npm/yjs@13.6.27/+esm";
+    import { WebsocketProvider } from "https://cdn.jsdelivr.net/npm/y-websocket@3.0.0/+esm";
+    import { CodemirrorBinding } from "https://cdn.jsdelivr.net/npm/y-codemirror@3.0.1/+esm";
     const roomId = "<%= roomId %>";
     const sharedContentId = "<%= sharedContentId %>";
+    // Wait for all CDN scripts to load
+    window.addEventListener('load', function() {
+      // yjs collaborative editing setup
+      const ydoc = new Y.Doc()
+      const wsUrl = `ws://${window.location.hostname}:1234/ws?room=${roomId}`
+      const provider = new WebsocketProvider(wsUrl, roomId, ydoc)
+      const ytext = ydoc.getText('codemirror')
+      const binding = new CodemirrorBinding(ytext, window.editor, provider.awareness)
+
+      // Set up awareness (cursor sharing)
+      provider.awareness.setLocalStateField('user', {
+        name: 'User ' + Math.floor(Math.random() * 100),
+        color: '#' + Math.floor(Math.random() * 16777215).toString(16)
+      })
+
+      // Load shared content if provided
+      if (sharedContentId && sharedContentId.trim() !== '') {
+        console.log(`Loading shared content: ${sharedContentId}`)
+        // The server will handle loading shared content
+      }
+
+      console.log('yjs collaborative editing initialized')
+    })
   </script>
-  <script type="module" src="/app.js"></script>
 </body>
 </html>

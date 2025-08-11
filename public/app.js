@@ -219,16 +219,5 @@ gpOptionsBtn.addEventListener("click", () => {
   gpOptions.classList.add("hidden");
 });
 
-const socket = io();
-const adapter = new ot.SocketIOAdapter(socket);
-const cmAdapter = new ot.CodeMirrorAdapter(editor);
-
-socket.emit("join", {
-  docId: roomId,
-  sharedContentId,
-});
-
-socket.on("doc", (data) => {
-  editor.setValue(data.str);
-  new ot.EditorClient(data.revision, data.clients, adapter, cmAdapter);
-});
+// yjs collaborative editing setup - loaded from CDN in room.ejs
+// This code will be moved to room.ejs as a module script

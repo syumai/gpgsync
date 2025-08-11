@@ -1,11 +1,12 @@
-const { server } = require("./app/server.ts");
+const { app } = require("./app/server.ts");
 
 if (module === require.main) {
   const port = process.env.PORT || 8080;
-  server.listen(port, () => {
-    console.log(`App listening on port ${port}`);
+  app.listen(port, () => {
+    console.log(`Express server listening on port ${port}`);
+    console.log("yjs WebSocket server should be started separately on port 1234");
     console.log("Press Ctrl+C to quit.");
   });
 }
 
-module.exports = server;
+module.exports = app;
