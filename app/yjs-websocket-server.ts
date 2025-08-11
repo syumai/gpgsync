@@ -67,14 +67,14 @@ class YjsWebSocketServer {
     this.setupWebSocketHandlers();
   }
 
-  private setupYjsConnection(ws: ws.WebSocket, doc: Y.Doc): void {
+  private setupYjsConnection(ws: ws.WebSocket, doc: Y.Doc, roomId: string): void {
     const awareness = new Awareness(doc);
     
-    // Send sync step 1
-    const encoder = encoding.createEncoder();
-    encoding.writeVarUint(encoder, 0); // messageSync
-    syncProtocol.writeSyncStep1(encoder, doc);
-    ws.send(encoding.toUint8Array(encoder));
+    // Send sync step 1 immediately
+    const syncEncoder = encoding.createEncoder();
+    encoding.writeVarUint(syncEncoder, 0); // messageSync
+    syncProtocol.writeSyncStep1(syncEncoder, doc);
+    ws.send(encoding.toUint8Array(syncEncoder));
 
     const messageListener = (message: Uint8Array) => {
       try {
@@ -83,14 +83,17 @@ class YjsWebSocketServer {
         
         switch (messageType) {
           case 0: // messageSync
-            encoding.writeVarUint(encoder, 0);
-            syncProtocol.readSyncMessage(decoder, encoder, doc, null);
-            if (encoding.length(encoder) > 1) {
-              ws.send(encoding.toUint8Array(encoder));
+            const responseEncoder = encoding.createEncoder();
+            encoding.writeVarUint(responseEncoder, 0);
+            syncProtocol.readSyncMessage(decoder, responseEncoder, doc, ws);
+            if (encoding.length(responseEncoder) > 1) {
+              ws.send(encoding.toUint8Array(responseEncoder));
             }
             break;
           case 1: // messageAwareness
-            applyAwarenessUpdate(awareness, decoding.readVarUint8Array(decoder), null);
+            applyAwarenessUpdate(awareness, decoding.readVarUint8Array(decoder), ws);
+            // Broadcast awareness to all other clients in the room
+            this.broadcastAwareness(roomId, awareness, ws);
             break;
         }
       } catch (err) {
@@ -99,11 +102,21 @@ class YjsWebSocketServer {
     };
 
     const awarenessChangeHandler = (changed: any, origin: any) => {
-      if (origin !== null) {
+      if (origin !== ws) {
+        const changedClients = changed.added.concat(changed.updated).concat(changed.removed);
         const encoder = encoding.createEncoder();
         encoding.writeVarUint(encoder, 1); // messageAwareness
-        encoding.writeVarUint8Array(encoder, encodeAwarenessUpdate(awareness, changed.added.concat(changed.updated).concat(changed.removed)));
-        ws.send(encoding.toUint8Array(encoder));
+        encoding.writeVarUint8Array(encoder, encodeAwarenessUpdate(awareness, changedClients));
+        const message = encoding.toUint8Array(encoder);
+        
+        // Send to this specific client
+        ws.send(message);
+      }
+      
+      // Always broadcast awareness changes to other clients in room
+      const changedClients = changed.added.concat(changed.updated).concat(changed.removed);
+      if (changedClients.length > 0) {
+        this.broadcastAwareness(roomId, awareness, ws);
       }
     };
 
@@ -114,6 +127,8 @@ class YjsWebSocketServer {
         syncProtocol.writeUpdate(encoder, update);
         ws.send(encoding.toUint8Array(encoder));
       }
+      // Broadcast update to all other clients in the room
+      this.broadcastUpdate(roomId, update, ws);
     };
 
     (doc as any).on('update', updateHandler);
@@ -126,6 +141,8 @@ class YjsWebSocketServer {
     ws.on('close', () => {
       (doc as any).off('update', updateHandler);
       (awareness as any).off('change', awarenessChangeHandler);
+      
+      // Remove awareness for this client and notify others
       awareness.destroy();
     });
   }
@@ -149,7 +166,7 @@ class YjsWebSocketServer {
       console.log(`Client connected to room: ${roomId}`);
       
       const doc = this.roomManager.getRoom(roomId);
-      this.setupYjsConnection(ws, doc);
+      this.setupYjsConnection(ws, doc, roomId);
 
       // Track connection for this room
       if (!this.roomConnections.has(roomId)) {
@@ -212,6 +229,38 @@ class YjsWebSocketServer {
 
   getRoomCount(): number {
     return this.roomManager.getRoomCount();
+  }
+
+  private broadcastAwareness(roomId: string, awareness: Awareness, excludeWs?: ws.WebSocket): void {
+    const roomConnections = this.roomConnections.get(roomId);
+    if (!roomConnections) return;
+
+    const encoder = encoding.createEncoder();
+    encoding.writeVarUint(encoder, 1); // messageAwareness
+    encoding.writeVarUint8Array(encoder, encodeAwarenessUpdate(awareness, Array.from(awareness.getStates().keys())));
+    const message = encoding.toUint8Array(encoder);
+
+    roomConnections.forEach(clientWs => {
+      if (clientWs !== excludeWs && clientWs.readyState === ws.WebSocket.OPEN) {
+        clientWs.send(message);
+      }
+    });
+  }
+
+  private broadcastUpdate(roomId: string, update: Uint8Array, excludeWs?: ws.WebSocket): void {
+    const roomConnections = this.roomConnections.get(roomId);
+    if (!roomConnections) return;
+
+    const encoder = encoding.createEncoder();
+    encoding.writeVarUint(encoder, 0); // messageSync
+    syncProtocol.writeUpdate(encoder, update);
+    const message = encoding.toUint8Array(encoder);
+
+    roomConnections.forEach(clientWs => {
+      if (clientWs !== excludeWs && clientWs.readyState === ws.WebSocket.OPEN) {
+        clientWs.send(message);
+      }
+    });
   }
 
   // Method to load shared content from Go Playground
