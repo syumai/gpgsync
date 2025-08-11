@@ -6,8 +6,8 @@ GPGSync is a collaborative real-time code editor based on The Go Playground. It 
 ## Live Demo
 https://gpgsync.herokuapp.com
 
-## Current Deployment
-The project has migrated from a Node.js Express + WebSocket architecture to Cloudflare Workers with Durable Objects for improved scalability and global distribution.
+## Current Architecture
+The project has fully migrated to Cloudflare Workers with Durable Objects for improved scalability and global distribution.
 
 ## Key Features
 - Real-time collaborative Go code editing
@@ -16,12 +16,12 @@ The project has migrated from a Node.js Express + WebSocket architecture to Clou
 - WebSocket-based synchronization using Yjs
 - Support for pre-loaded content via shared IDs
 
-## Architecture Evolution
-The project is in transition:
-- **Legacy**: Node.js Express server + separate Yjs WebSocket server
-- **Current**: Cloudflare Workers with Durable Objects using Hono framework
-- **Collaboration**: Yjs-based CRDT for conflict-free editing
+## Architecture
+- **Platform**: Cloudflare Workers with Durable Objects
+- **Framework**: Hono for HTTP routing and middleware
+- **Collaboration**: Yjs-based CRDT for conflict-free editing using y-durableobjects
 - **Frontend**: TypeScript with CodeMirror editor
+- **Deployment**: Wrangler-based deployment to Cloudflare
 
 ## URL Patterns
 - `/` - Home page

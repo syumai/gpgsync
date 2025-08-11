@@ -1,92 +1,65 @@
-# Development Commands
+# Suggested Commands
 
-## Package Management
+## Development Commands
+
+### Running the Application
 ```bash
-# Install dependencies
+# Install dependencies (uses pnpm)
 pnpm install
-```
 
-## Development Servers
-
-### Cloudflare Workers (Current/Preferred)
-```bash
-# Start development server with Wrangler
-npm run wrangler:dev
-# or with build
+# Start the development server (Cloudflare Workers with Wrangler)
 npm run cf:dev
-
-# Deploy to Cloudflare
-npm run cf:deploy
-# or just deploy
-npm run wrangler:deploy
-
-# Generate TypeScript types
-npm run wrangler:types
+# or
+make dev
+# Application runs on http://localhost:8787 by default
 ```
 
-### Legacy Node.js Server
+### Frontend Development
 ```bash
-# Start both Express and Yjs WebSocket servers
-node server.ts
-# Express server: http://localhost:8080 (or PORT env var)
-# Yjs WebSocket: ws://localhost:8136 (or YJS_PORT env var)
-```
-
-## Frontend Development
-```bash
-# Build for production
+# Build frontend for production
 npm run build
 
-# Development build with watch mode  
+# Build frontend for development with watch mode
 npm run dev
 
-# Webpack dev server
+# Serve frontend with webpack dev server
 npm run serve
 ```
 
-## Quality Checks
+### Deployment
 ```bash
-# Check server-side TypeScript
-npx tsc --noEmit
-
-# Check client-side TypeScript
-npx tsc --noEmit -p tsconfig.client.json
-
-# Check worker TypeScript
-npx tsc --noEmit -p tsconfig.worker.json
-```
-
-## Deployment
-```bash
-# Deploy to Heroku (legacy)
+# Deploy to Cloudflare Workers
 make deploy
-# equivalent to: git push heroku main
+# This runs: npm run cf:deploy (which runs npm run build && wrangler deploy)
 
-# Deploy to Cloudflare (current)
+# Development deployment with Wrangler
+npm run wrangler:dev
+
+# Production deployment with Wrangler
 npm run wrangler:deploy
 ```
 
-## Useful System Commands (macOS/Darwin)
+### Quality Checks
 ```bash
-# File operations
-ls -la          # List files with details
-find . -name    # Find files by name
-grep -r         # Search in files
-cd              # Change directory
+# Check worker TypeScript compilation
+npx tsc --noEmit -p tsconfig.worker.json
 
-# Process management
-ps aux          # List processes
-lsof -i         # List open ports
-kill -9 PID     # Force kill process
+# Check client-side TypeScript compilation  
+npx tsc --noEmit -p tsconfig.client.json
 
-# Git operations
-git status      # Check repository status
-git add .       # Stage changes
-git commit -m   # Commit with message
-git push        # Push to remote
+# Generate Wrangler types (for Cloudflare Workers)
+npm run wrangler:types
 ```
 
-## Environment Variables
-- `PORT`: Express server port (default: 8080)
-- `YJS_PORT`: Yjs WebSocket server port (default: 8136)
-- `ENVIRONMENT`: development/production
+### Available npm scripts
+- `npm run build` - Build frontend for production
+- `npm run dev` - Build frontend in development mode with watch
+- `npm run serve` - Serve frontend with webpack dev server
+- `npm run wrangler:dev` - Start Wrangler development server
+- `npm run wrangler:deploy` - Deploy to Cloudflare Workers
+- `npm run wrangler:types` - Generate Cloudflare Workers types
+- `npm run cf:dev` - Build and run with Wrangler
+- `npm run cf:deploy` - Build and deploy to Cloudflare Workers
+
+### Testing
+**Note**: The project currently has no automated testing, linting, or formatting tools configured. The package.json test script is a placeholder that exits with an error.

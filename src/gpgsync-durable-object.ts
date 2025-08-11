@@ -1,41 +1,53 @@
 import { YDurableObjects } from "y-durableobjects";
 import * as Y from "yjs";
-import { Env } from "./worker.js";
 
-export class GPGSyncDurableObject extends YDurableObjects<Env> {
+export interface GPGSyncEnv {
+  GPGSYNC_ROOMS: DurableObjectNamespace;
+  ASSETS: Fetcher;
+}
+
+// Use any to bypass TypeScript issues with y-durableobjects for now
+export class GPGSyncDurableObject extends (YDurableObjects as any) {
   private isInitialized: boolean = false;
   
-  constructor(state: DurableObjectState, env: Env) {
+  constructor(state: DurableObjectState, env: any) {
     super(state, env);
   }
 
   async fetch(request: Request): Promise<Response> {
-    // Initialize the room with default content if not already done
-    if (!this.isInitialized) {
-      await this.initializeRoom();
-      this.isInitialized = true;
-    }
-
     // Handle WebSocket upgrade requests and other HTTP requests
-    return super.fetch(request);
+    const response = await super.fetch(request);
+    
+    // Try to initialize after the parent has handled the request
+    if (!this.isInitialized) {
+      // Use a small delay to ensure the document is ready
+      setTimeout(() => {
+        this.initializeRoom().then(() => {
+          this.isInitialized = true;
+        });
+      }, 100);
+    }
+    
+    return response;
   }
 
   private async initializeRoom(): Promise<void> {
     try {
       // Access the internal Yjs document directly
-      // y-durableobjects provides access via this.doc
-      const text = this.doc.getText('codemirror');
+      const text = (this as any).doc.getText('codemirror');
       
       if (text.length === 0) {
         // Initialize with default Go content
         const initialContent = this.getInitialGoContent();
         
         // Use a transaction to ensure atomicity
-        this.doc.transact(() => {
+        (this as any).doc.transact(() => {
           text.insert(0, initialContent);
         });
         
         console.log('Initialized room with default Go content');
+      } else {
+        console.log('Room already has content, skipping initialization');
       }
     } catch (error) {
       console.error('Error initializing room:', error);
@@ -59,10 +71,10 @@ func main() {
       
       if (content) {
         // Access the internal Yjs document directly
-        const text = this.doc.getText('codemirror');
+        const text = (this as any).doc.getText('codemirror');
         
         // Replace content atomically
-        this.doc.transact(() => {
+        (this as any).doc.transact(() => {
           text.delete(0, text.length);
           text.insert(0, content);
         });
@@ -120,6 +132,25 @@ func main() {
         documentSize: 0,
         lastUpdate: 0
       };
+    }
+  }
+
+  // Handle WebSocket open events
+  async webSocketOpen(ws: WebSocket): Promise<void> {
+    console.log('WebSocket opened');
+    
+    // Initialize room with default content when first connection opens
+    if (!this.isInitialized) {
+      // Small delay to ensure Yjs document is ready
+      setTimeout(async () => {
+        await this.initializeRoom();
+        this.isInitialized = true;
+      }, 250);
+    }
+
+    // Call parent open handler if it exists
+    if (super.webSocketOpen) {
+      await super.webSocketOpen(ws);
     }
   }
 

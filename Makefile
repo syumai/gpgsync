@@ -1,3 +1,7 @@
 .PHONY: deploy
 deploy:
-	git push heroku main
+	npm run cf:deploy
+
+.PHONY: dev
+dev:
+	npm run cf:dev

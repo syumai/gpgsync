@@ -1,45 +1,47 @@
-# Technology Stack
+# Tech Stack
 
-## Runtime & Platform
-- **Primary**: Cloudflare Workers (current deployment target)
-- **Legacy**: Node.js 22.x 
+## Backend
+- **Runtime**: Cloudflare Workers
+- **Framework**: Hono with HTML templating
+- **Real-time**: Yjs with y-durableobjects
+- **Persistence**: Cloudflare Durable Objects
+- **Go Integration**: @syumai/goplayground via direct API calls
+- **Language**: TypeScript with ES modules
+
+## Frontend  
+- **Editor**: CodeMirror with y-codemirror for Yjs integration
+- **Real-time**: Yjs client libraries (yjs, y-protocols, lib0)
+- **Build**: Webpack 5 with TypeScript and Babel loaders
+- **Language**: TypeScript (client-side configuration)
+
+## Development
 - **Package Manager**: pnpm
+- **Build System**: Webpack with ts-loader, babel-loader
+- **TypeScript**: Strict mode, separate worker/client configurations
+- **Deployment**: Cloudflare Workers with Wrangler
 
-## Backend Frameworks
-- **Current**: Hono (Cloudflare Workers)
-- **Legacy**: Express.js 5.x with EJS templating
+## Key Dependencies
 
-## Real-time Collaboration
-- **Core**: Yjs (conflict-free replicated data types)
-- **Transport**: y-websocket, y-durableobjects
-- **Protocols**: y-protocols, lib0
-- **WebSocket**: ws library (Node.js version)
+### Production
+- `@syumai/goplayground`: Go Playground integration
+- `hono`: Web framework for Cloudflare Workers
+- `lib0`: Low-level utilities for Yjs
+- `y-codemirror`: CodeMirror binding for Yjs
+- `y-durableobjects`: Yjs integration with Cloudflare Durable Objects
+- `y-protocols`: Yjs networking protocols
+- `yjs`: Conflict-free replicated data types
 
-## Frontend
-- **Editor**: CodeMirror with y-codemirror integration
-- **Language**: TypeScript with strict mode
-- **Build System**: Webpack 5
-- **Loaders**: ts-loader, babel-loader
-- **Babel**: @babel/core, @babel/preset-env
+### Development
+- `@cloudflare/workers-types`: TypeScript types for Workers
+- `wrangler`: Cloudflare Workers CLI
+- `webpack`: Module bundler
+- `typescript`: TypeScript compiler
+- Various loaders and build tools
 
-## Go Integration
-- **API**: @syumai/goplayground, @syumai/goplayground-node
-- **Execution**: Go Playground API integration
-
-## Development Tools
-- **TypeScript**: v5.9.2 with strict configuration
-- **Configurations**: Separate tsconfig for server/client/worker
-- **Module System**: ES modules with .ts extensions
-- **Build Target**: ESNext with Node.js compatibility
-
-## Deployment
-- **Primary**: Cloudflare Workers via Wrangler
-- **Legacy**: Heroku via git deployment
-- **Assets**: Static file serving from public/ directory
-
-## Dependencies Overview
-- Yjs ecosystem for collaboration
-- Hono for modern web framework
-- TypeScript for type safety
-- Webpack for frontend bundling
-- Cloudflare Workers Types for deployment
+## Removed Dependencies
+The migration to Cloudflare Workers removed these Node.js dependencies:
+- `express`: Web framework
+- `ejs`: Template engine
+- `ws`: WebSocket library
+- `@syumai/goplayground-node`: Node.js-specific Go Playground client
+- `@types/express`, `@types/ejs`, `@types/ws`: Type definitions

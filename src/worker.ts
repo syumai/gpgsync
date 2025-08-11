@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { yRoute } from "y-durableobjects";
 import { serveStatic } from "hono/cloudflare-workers";
-import { GPGSyncDurableObject } from "./gpgsync-durable-object.js";
+import { GPGSyncDurableObject, GPGSyncEnv } from "./gpgsync-durable-object.js";
 import { 
   validateRoomId, 
   validateSharedContentIdLength,
@@ -9,11 +9,7 @@ import {
 } from "./validators.js";
 import { homeTemplate, roomTemplate } from "./templates.js";
 
-export interface Env {
-  GPGSYNC_ROOMS: DurableObjectNamespace<GPGSyncDurableObject>;
-  ASSETS: Fetcher;
-  // Add other environment variables as needed
-}
+type Env = GPGSyncEnv;
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -98,7 +94,7 @@ app.get("/rooms/:roomId/p/:sharedContentId", (c) => {
 
 // Y.js WebSocket route using y-durableobjects
 // This handles WebSocket upgrades for room collaboration
-const yjsRoute = yRoute<{ Bindings: Env }>((env) => env.GPGSYNC_ROOMS);
+const yjsRoute = yRoute<{ Bindings: Env }>((env: Env) => env.GPGSYNC_ROOMS);
 app.route("/yjs", yjsRoute);
 
 // Health check endpoint

@@ -15,10 +15,11 @@ gpgsync is a collaborative real-time code editor based on The Go Playground. It 
 # Install dependencies (uses pnpm)
 pnpm install
 
-# Start the development server (both Express and Yjs WebSocket servers)
-node server.ts
-# Express server runs on http://localhost:8080 (or PORT env var)
-# Yjs WebSocket server runs on ws://localhost:8136/ws (or YJS_PORT env var)
+# Start the development server (Cloudflare Workers with Wrangler)
+npm run cf:dev
+# or
+make dev
+# Application runs on http://localhost:8787 by default
 ```
 
 ### Frontend Development
@@ -35,43 +36,54 @@ npm run serve
 
 ### Deployment
 ```bash
-# Deploy to Heroku
+# Deploy to Cloudflare Workers
 make deploy
-# This runs: git push heroku main
+# This runs: npm run cf:deploy (which runs npm run build && wrangler deploy)
+
+# Development deployment with Wrangler
+npm run wrangler:dev
+
+# Production deployment with Wrangler
+npm run wrangler:deploy
 ```
 
 ### Quality Checks
 ```bash
-# Check server-side TypeScript compilation
-npx tsc --noEmit
+# Check worker TypeScript compilation
+npx tsc --noEmit -p tsconfig.worker.json
 
 # Check client-side TypeScript compilation  
 npx tsc --noEmit -p tsconfig.client.json
+
+# Generate Wrangler types (for Cloudflare Workers)
+npm run wrangler:types
 ```
 
 **Note**: The project currently has no automated testing, linting, or formatting tools configured. The package.json test script is a placeholder that exits with an error.
 
 ## Architecture
 
-### Dual Server Architecture
-The application runs two concurrent servers:
+### Cloudflare Workers Architecture
+The application runs entirely on Cloudflare Workers with Durable Objects:
 
-1. **Express Server** (`server.ts` → `app/server.ts`):
-   - HTTP server with EJS templating
-   - Static file serving from `public/`
+1. **Hono HTTP Server** (`src/worker.ts`):
+   - HTTP server with HTML template rendering
+   - Static asset serving via Cloudflare Workers ASSETS binding
    - Route handlers for home and room pages
-   - Port: 8080 (default) or PORT environment variable
+   - Runs on Cloudflare's global edge network
 
-2. **Yjs WebSocket Server** (`app/yjs-websocket-server.ts`):
-   - Real-time collaborative editing server
-   - WebSocket-based communication using y-websocket
-   - Port: 8136 (default) or YJS_PORT environment variable
+2. **Durable Objects** (`src/gpgsync-durable-object.ts`):
+   - Real-time collaborative editing using y-durableobjects
+   - WebSocket-based communication with Yjs protocol
+   - Persistent room state managed by Cloudflare
+   - Automatic scaling and cleanup
 
 ### Request Flow
-1. User accesses room URL via Express server
-2. Client connects to Yjs WebSocket server for real-time collaboration  
-3. Collaborative editing state synchronized via Yjs operations
-4. Go code execution handled via @syumai/goplayground-node API
+1. User accesses room URL via Cloudflare Workers
+2. Static assets served from edge cache
+3. WebSocket connections upgrade to Durable Objects for real-time collaboration
+4. Collaborative editing state synchronized via Yjs operations stored in Durable Objects
+5. Go code execution handled via direct Go Playground API calls
 
 ### Key URL Patterns
 - `/` - Home page
@@ -82,39 +94,40 @@ The application runs two concurrent servers:
 ### Project Structure
 ```
 gpgsync/
-├── server.ts              # Main server entry point
-├── app/                   # Backend application code
-│   ├── server.ts          # Express app configuration
-│   ├── handlers.ts        # Route handlers
-│   ├── middlewares.ts     # Express middleware
+├── src/                   # Cloudflare Workers code
+│   ├── worker.ts          # Hono app entry point (main server)
+│   ├── gpgsync-durable-object.ts # Durable Object for rooms
 │   ├── validators.ts      # Input validation
-│   └── yjs-websocket-server.ts # Yjs WebSocket server
+│   └── templates.ts       # HTML templates
 ├── web/                   # Frontend TypeScript code
 │   └── room.ts           # Client-side room functionality
 ├── public/                # Static assets and webpack output
-├── views/                 # EJS templates
+├── wrangler.toml          # Cloudflare Workers configuration
 ├── webpack.config.js      # Frontend build configuration
+├── tsconfig.worker.json   # Worker TypeScript configuration
+├── tsconfig.client.json   # Client TypeScript configuration
 └── package.json          # Dependencies and scripts
 ```
 
 ### Important Implementation Details
 
-- **Collaboration Technology**: Uses Yjs instead of Socket.IO + ot.js for real-time collaboration
+- **Collaboration Technology**: Uses Yjs with y-durableobjects for real-time collaboration
 - **ES Modules**: Entire codebase uses ES modules with .ts file extensions in imports
-- **TypeScript**: Strict mode with modern ES features, separate configs for server/client
-- **State Management**: Collaboration state handled by Yjs (persistent in WebSocket server)
-- **Room Lifecycle**: Rooms created on-demand, cleanup handled by Yjs server
-- **Go Integration**: Uses `@syumai/goplayground-node` for shared content and code execution
-- **Validation**: Input validation for room IDs and shared content IDs in `app/validators.ts`
-- **Error Handling**: Centralized middleware in `app/middlewares.ts` with graceful shutdown
+- **TypeScript**: Strict mode with modern ES features, separate configs for worker/client
+- **State Management**: Collaboration state handled by Yjs (persistent in Durable Objects)
+- **Room Lifecycle**: Rooms created on-demand, cleanup handled automatically by Cloudflare
+- **Go Integration**: Direct Go Playground API calls via fetch (no Node.js dependencies)
+- **Validation**: Input validation for room IDs and shared content IDs in `src/validators.ts`
+- **Error Handling**: Hono error handling middleware with proper HTTP responses
 
 ## Tech Stack
 
 ### Backend
-- **Runtime**: Node.js 22.x
-- **Framework**: Express.js 5.x with EJS templating  
-- **Real-time**: Yjs with y-websocket, ws WebSocket library
-- **Go Integration**: @syumai/goplayground, @syumai/goplayground-node
+- **Runtime**: Cloudflare Workers
+- **Framework**: Hono with HTML templating
+- **Real-time**: Yjs with y-durableobjects
+- **Persistence**: Cloudflare Durable Objects
+- **Go Integration**: @syumai/goplayground via direct API calls
 - **Language**: TypeScript with ES modules
 
 ### Frontend  
@@ -126,8 +139,8 @@ gpgsync/
 ### Development
 - **Package Manager**: pnpm
 - **Build System**: Webpack with ts-loader, babel-loader
-- **TypeScript**: Strict mode, separate server/client configurations
-- **Deployment**: Heroku with git-based deployment
+- **TypeScript**: Strict mode, separate worker/client configurations
+- **Deployment**: Cloudflare Workers with Wrangler
 
 ## Code Style Guidelines
 
