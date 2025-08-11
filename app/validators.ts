@@ -1,4 +1,4 @@
-const { InvalidArgumentError } = require("./errors.ts");
+import { InvalidArgumentError } from "./errors.ts";
 
 const maxRoomIdLength = 20;
 const maxSharedContentIdLength = 20;
@@ -21,7 +21,7 @@ const validateSharedContentIdLength = (sharedContentId: string): void => {
   }
 };
 
-module.exports = {
+export {
   validateRoomId,
   validateSharedContentIdLength,
 };

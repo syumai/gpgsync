@@ -1,11 +1,15 @@
 import type { Request, Response } from "express";
-const path = require("path");
-const { helloWorld } = require("./consts.ts");
-const { GoPlayground } = require("@syumai/goplayground-node");
-const {
+import path from "path";
+import { fileURLToPath } from "url";
+import { helloWorld } from "./consts.ts";
+import { GoPlayground } from "@syumai/goplayground-node";
+import {
   validateRoomId,
   validateSharedContentIdLength,
-} = require("./validators.ts");
+} from "./validators.ts";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const gp = new GoPlayground();
 const viewRootPath = path.join(__dirname, "../views");
@@ -32,7 +36,7 @@ const roomHandler = (req: Request, res: Response): void => {
   });
 };
 
-module.exports = {
+export {
   homeHandler,
   roomHandler,
 };

@@ -9,6 +9,6 @@ func main() {
 }
 `;
 
-module.exports = {
+export {
   helloWorld,
 };

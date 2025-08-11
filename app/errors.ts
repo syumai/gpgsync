@@ -13,7 +13,7 @@ class InvalidArgumentError extends APIError {
   }
 }
 
-module.exports = {
+export {
   APIError,
   InvalidArgumentError,
 };

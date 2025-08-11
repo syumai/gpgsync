@@ -2,6 +2,7 @@
   "name": "gpgsync",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "description": "A multi-person editable version of The Go Playground.",
   "main": "server.js",
   "scripts": {

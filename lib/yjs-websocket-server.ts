@@ -1,10 +1,10 @@
-const Y = require('yjs');
-const ws = require('ws');
-const http = require('http');
-const encoding = require('lib0/encoding');
-const decoding = require('lib0/decoding');
-const syncProtocol = require('y-protocols/sync');
-const { Awareness, encodeAwarenessUpdate, applyAwarenessUpdate } = require('y-protocols/awareness');
+import * as Y from 'yjs';
+import * as ws from 'ws';
+import * as http from 'http';
+import * as encoding from 'lib0/encoding';
+import * as decoding from 'lib0/decoding';
+import * as syncProtocol from 'y-protocols/sync';
+import { Awareness, encodeAwarenessUpdate, applyAwarenessUpdate } from 'y-protocols/awareness';
 
 interface RoomManager {
   rooms: Map<string, Y.Doc>;
@@ -197,7 +197,7 @@ class YjsWebSocketServer {
   // Method to load shared content from Go Playground
   async loadSharedContent(roomId: string, sharedContentId: string): Promise<void> {
     try {
-      const { GoPlayground } = require('@syumai/goplayground-node');
+      const { GoPlayground } = await import('@syumai/goplayground-node');
       const gp = new GoPlayground();
       const content = await gp.download(sharedContentId);
       
@@ -218,5 +218,5 @@ class YjsWebSocketServer {
   }
 }
 
-module.exports = { YjsWebSocketServer };
-module.exports.default = YjsWebSocketServer;
+export { YjsWebSocketServer };
+export default YjsWebSocketServer;

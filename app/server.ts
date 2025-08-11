@@ -1,7 +1,11 @@
-const express = require("express");
-const path = require("path");
-const { homeHandler, roomHandler } = require("./handlers.ts");
-const { invalidURIValidatorHandler, errorHandler } = require("./middlewares.ts");
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+import { homeHandler, roomHandler } from "./handlers.ts";
+import { invalidURIValidatorHandler, errorHandler } from "./middlewares.ts";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const publicPath = path.join(__dirname, "../public");
 
@@ -25,6 +29,4 @@ app.get("/rooms/:roomId", roomHandler);
 
 app.use(errorHandler);
 
-module.exports = {
-  app,
-};
+export { app };

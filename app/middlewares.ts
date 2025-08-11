@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-const { InvalidArgumentError, APIError } = require("./errors.ts");
+import { InvalidArgumentError, APIError } from "./errors.ts";
 
 const invalidURIValidatorHandler = (req: Request, res: Response, next: NextFunction): void => {
   let err;
@@ -30,7 +30,7 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
   });
 };
 
-module.exports = {
+export {
   invalidURIValidatorHandler,
   errorHandler,
 };

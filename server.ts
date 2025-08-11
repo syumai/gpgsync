@@ -1,5 +1,5 @@
-const { app } = require("./app/server.ts");
-const { YjsWebSocketServer } = require('./lib/yjs-websocket-server.ts');
+import { app } from "./app/server.ts";
+import { YjsWebSocketServer } from './lib/yjs-websocket-server.ts';
 
 const expressPort = process.env.PORT || 8080;
 const yjsPort = process.env.YJS_PORT ? parseInt(process.env.YJS_PORT) : 1234;
@@ -107,8 +107,8 @@ async function startServers() {
   }
 }
 
-if (module === require.main) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   startServers();
 }
 
-module.exports = app;
+export { app };
