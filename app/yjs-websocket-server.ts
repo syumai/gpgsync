@@ -28,7 +28,7 @@ class YjsRoomManager {
     if (doc) {
       doc.destroy();
       this.rooms.delete(roomId);
-      console.log(`Destroyed room: ${roomId}`);
+      console.log(`Destroyed room: ${roomId} (total rooms: ${this.rooms.size})`);
     }
   }
 
