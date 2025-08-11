@@ -22,7 +22,7 @@ pnpm remove <package-name>
 # Start the main application (both Express and Yjs servers)
 node server.ts
 # Runs Express server on http://localhost:8080
-# Runs Yjs WebSocket server on ws://localhost:1234/ws
+# Runs Yjs WebSocket server on ws://localhost:8136/ws
 ```
 
 ### Build Commands
