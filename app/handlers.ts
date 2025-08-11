@@ -1,8 +1,7 @@
 import type { Request, Response } from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { helloWorld } from "./consts.ts";
-import { GoPlayground } from "@syumai/goplayground-node";
+
 import {
   validateRoomId,
   validateSharedContentIdLength,
@@ -11,7 +10,6 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const gp = new GoPlayground();
 const viewRootPath = path.join(__dirname, "../views");
 
 const homeHandler = (req: Request, res: Response): void => {
@@ -26,7 +24,7 @@ const homeHandler = (req: Request, res: Response): void => {
 
 const roomHandler = (req: Request, res: Response): void => {
   const { roomId, sharedContentId } = req.params;
-  validateRoomId(roomId);
+  validateRoomId(roomId!);
   if (sharedContentId) {
     validateSharedContentIdLength(sharedContentId);
   }

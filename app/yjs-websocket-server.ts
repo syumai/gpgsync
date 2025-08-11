@@ -219,4 +219,3 @@ class YjsWebSocketServer {
 }
 
 export { YjsWebSocketServer };
-export default YjsWebSocketServer;
