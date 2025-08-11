@@ -2,8 +2,8 @@ const express = require("express");
 const path = require("path");
 const http = require("http");
 const socketio = require("socket.io");
-const { homeHandler, roomHandler, ioServerHandler } = require("./handlers");
-const { invalidURIValidatorHandler, errorHandler } = require("./middlewares");
+const { homeHandler, roomHandler, ioServerHandler } = require("./handlers.ts");
+const { invalidURIValidatorHandler, errorHandler } = require("./middlewares.ts");
 
 const publicPath = path.join(__dirname, "../public");
 

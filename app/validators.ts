@@ -1,4 +1,4 @@
-const { InvalidArgumentError } = require("./errors");
+const { InvalidArgumentError } = require("./errors.ts");
 
 const maxRoomIdLength = 20;
 const maxSharedContentIdLength = 20;

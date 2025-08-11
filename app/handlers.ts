@@ -1,11 +1,11 @@
 const path = require("path");
-const EditorSocketIOServer = require("../lib/editor-socketio-server");
-const { helloWorld } = require("./consts");
+const EditorSocketIOServer = require("../lib/editor-socketio-server.ts");
+const { helloWorld } = require("./consts.ts");
 const { GoPlayground } = require("@syumai/goplayground-node");
 const {
   validateRoomId,
   validateSharedContentIdLength,
-} = require("./validators");
+} = require("./validators.ts");
 
 const gp = new GoPlayground();
 const viewRootPath = path.join(__dirname, "../views");

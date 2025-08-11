@@ -1,4 +1,4 @@
-const { InvalidArgumentError, APIError } = require("./errors");
+const { InvalidArgumentError, APIError } = require("./errors.ts");
 
 const invalidURIValidatorHandler = (req, res, next) => {
   let err;
