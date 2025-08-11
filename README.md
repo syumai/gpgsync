@@ -4,23 +4,23 @@ A collaborative real-time code editor based on The Go Playground. Allows multipl
 
 ## Demo
 
-https://gpgsync.herokuapp.com
+https://gpgsync.syumai.workers.dev/
 
 ### Features
 
 ```console
 # Open room
-https://gpgsync.herokuapp.com/rooms/:roomId
+https://gpgsync.syumai.workers.dev/rooms/:roomId
 
 # Use shared content to create room
-https://gpgsync.herokuapp.com/p/:sharedContentId
+https://gpgsync.syumai.workers.dev/p/:sharedContentId
 
 # Open room with shared content
-https://gpgsync.herokuapp.com/rooms/:roomId/p/:sharedContentId
+https://gpgsync.syumai.workers.dev/rooms/:roomId/p/:sharedContentId
 ```
 
 * shared content ID can be gotten by Go Playground's `share` function.
-  - example: https://gpgsync.herokuapp.com/rooms/exampleRoom/p/xXqRTAb2hu7
+  - example: https://gpgsync.syumai.workers.dev/rooms/exampleRoom/p/xXqRTAb2hu7
 
 ## Usage
 
@@ -28,10 +28,11 @@ https://gpgsync.herokuapp.com/rooms/:roomId/p/:sharedContentId
 # Install dependencies (uses pnpm)
 pnpm install
 
-# Start the development server (both Express and Yjs WebSocket servers)
-node server.ts
-# Express server runs on http://localhost:8080 (or PORT env var)
-# Yjs WebSocket server runs on ws://localhost:8136 (or YJS_PORT env var)
+# Start the development server (Cloudflare Workers with Wrangler)
+npm run cf:dev
+# or
+make dev
+# Application runs on http://localhost:8787 by default
 ```
 
 ### Development Commands
@@ -43,18 +44,26 @@ npm run build
 # Build frontend for development with watch mode
 npm run dev
 
+# Serve frontend with webpack dev server
+npm run serve
+
+# Deploy to Cloudflare Workers
+make deploy
+# This runs: npm run cf:deploy (which runs npm run build && wrangler deploy)
+
 # Check TypeScript compilation
-npx tsc --noEmit                    # Server-side
-npx tsc --noEmit -p tsconfig.client.json  # Client-side
+npx tsc --noEmit -p tsconfig.worker.json   # Worker
+npx tsc --noEmit -p tsconfig.client.json   # Client-side
 ```
 
 ## Tech Stack
 
 ### Backend
-* **Runtime**: Node.js 22.x
-* **Framework**: Express.js 5.x with EJS templating
-* **Real-time**: Yjs with y-websocket, WebSocket (ws library)
-* **Go Integration**: [@syumai/goplayground](https://github.com/syumai/goplayground-js), [@syumai/goplayground-node](https://www.npmjs.com/package/@syumai/goplayground-node)
+* **Runtime**: Cloudflare Workers
+* **Framework**: Hono with HTML templating
+* **Real-time**: Yjs with y-durableobjects
+* **Persistence**: Cloudflare Durable Objects
+* **Go Integration**: [@syumai/goplayground](https://github.com/syumai/goplayground-js) via direct API calls
 * **Language**: TypeScript with ES modules
 
 ### Frontend
@@ -63,14 +72,19 @@ npx tsc --noEmit -p tsconfig.client.json  # Client-side
 * **Build**: Webpack 5 with TypeScript and Babel loaders
 * **Language**: TypeScript
 
+### Development
+* **Package Manager**: pnpm
+* **Deployment**: Cloudflare Workers with Wrangler
+* **TypeScript**: Strict mode, separate worker/client configurations
+
 ## Architecture
 
-The application runs two concurrent servers:
+The application runs entirely on Cloudflare Workers with Durable Objects:
 
-1. **Express Server**: HTTP server with EJS templating and static file serving
-2. **Yjs WebSocket Server**: Real-time collaborative editing server using WebSocket
+1. **Hono HTTP Server**: HTTP server with HTML template rendering and static asset serving
+2. **Durable Objects**: Real-time collaborative editing using y-durableobjects with persistent room state
 
-Collaborative editing is powered by Yjs for conflict-free replicated data types (CRDTs), providing superior real-time collaboration compared to operational transformation approaches.
+Collaborative editing is powered by Yjs for conflict-free replicated data types (CRDTs), providing superior real-time collaboration with global edge distribution via Cloudflare's network.
 
 ## References
 
