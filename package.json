@@ -26,5 +26,8 @@
     "express": "^5.1.0",
     "ot": "github:Operational-Transformation/ot.js#master",
     "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
   }
 }
