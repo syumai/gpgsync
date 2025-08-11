@@ -6,14 +6,7 @@ import * as decoding from 'lib0/decoding';
 import * as syncProtocol from 'y-protocols/sync';
 import { Awareness, encodeAwarenessUpdate, applyAwarenessUpdate } from 'y-protocols/awareness';
 
-interface RoomManager {
-  rooms: Map<string, Y.Doc>;
-  getRoom(roomId: string): Y.Doc;
-  destroyRoom(roomId: string): void;
-  getRoomCount(): number;
-}
-
-class YjsRoomManager implements RoomManager {
+class YjsRoomManager {
   public rooms: Map<string, Y.Doc> = new Map();
 
   getRoom(roomId: string): Y.Doc {
@@ -57,7 +50,7 @@ func main() {
 class YjsWebSocketServer {
   private server: http.Server;
   private wss: ws.WebSocketServer;
-  private roomManager: RoomManager;
+  private roomManager: YjsRoomManager;
   private port: number;
 
   constructor(port: number = 8136) {
