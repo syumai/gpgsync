@@ -1,26 +1,26 @@
-# gpgsync
+# gpsync
 
 A collaborative real-time code editor based on The Go Playground. Allows multiple users to simultaneously edit Go code in shared rooms using Yjs for real-time collaboration.
 
 ## Demo
 
-https://gpgsync.syumai.workers.dev/
+https://gpsync.syumai.workers.dev/
 
 ### Features
 
 ```console
 # Open room
-https://gpgsync.syumai.workers.dev/rooms/:roomId
+https://gpsync.syumai.workers.dev/rooms/:roomId
 
 # Use shared content to create room
-https://gpgsync.syumai.workers.dev/p/:sharedContentId
+https://gpsync.syumai.workers.dev/p/:sharedContentId
 
 # Open room with shared content
-https://gpgsync.syumai.workers.dev/rooms/:roomId/p/:sharedContentId
+https://gpsync.syumai.workers.dev/rooms/:roomId/p/:sharedContentId
 ```
 
 * shared content ID can be gotten by Go Playground's `share` function.
-  - example: https://gpgsync.syumai.workers.dev/rooms/exampleRoom/p/xXqRTAb2hu7
+  - example: https://gpsync.syumai.workers.dev/rooms/exampleRoom/p/xXqRTAb2hu7
 
 ## Usage
 

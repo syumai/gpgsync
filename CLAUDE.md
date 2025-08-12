@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-gpgsync is a collaborative real-time code editor based on The Go Playground. It allows multiple users to simultaneously edit Go code in shared rooms using Yjs for real-time collaboration and conflict-free collaborative editing.
+gpsync is a collaborative real-time code editor based on The Go Playground. It allows multiple users to simultaneously edit Go code in shared rooms using Yjs for real-time collaboration and conflict-free collaborative editing.
 
-**Live demo**: https://gpgsync.syumai.workers.dev/
+**Live demo**: https://gpsync.syumai.workers.dev/
 
 ## Development Commands
 
@@ -72,7 +72,7 @@ The application runs entirely on Cloudflare Workers with Durable Objects:
    - Route handlers for home and room pages
    - Runs on Cloudflare's global edge network
 
-2. **Durable Objects** (`src/gpgsync-durable-object.ts`):
+2. **Durable Objects** (`src/gpsync-durable-object.ts`):
    - Real-time collaborative editing using y-durableobjects
    - WebSocket-based communication with Yjs protocol
    - Persistent room state managed by Cloudflare
@@ -93,10 +93,10 @@ The application runs entirely on Cloudflare Workers with Durable Objects:
 
 ### Project Structure
 ```
-gpgsync/
+gpsync/
 ├── src/                   # Cloudflare Workers code
 │   ├── worker.ts          # Hono app entry point (main server)
-│   ├── gpgsync-durable-object.ts # Durable Object for rooms
+│   ├── gpsync-durable-object.ts # Durable Object for rooms
 │   ├── validators.ts      # Input validation
 │   └── templates.ts       # HTML templates
 ├── web/                   # Frontend TypeScript code

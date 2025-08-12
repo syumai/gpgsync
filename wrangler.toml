@@ -1,4 +1,4 @@
-name = "gpgsync"
+name = "gpsync"
 main = "src/worker.ts"
 compatibility_date = "2024-12-18"
 compatibility_flags = ["nodejs_compat"]
@@ -15,13 +15,13 @@ binding = "ASSETS"
 # Durable Objects bindings
 [durable_objects]
 bindings = [
-  { name = "GPGSYNC_ROOMS", class_name = "GPGSyncDurableObject" }
+  { name = "GPSYNC_ROOMS", class_name = "GPSyncDurableObject" }
 ]
 
 # Durable Objects migrations
 [[migrations]]
 tag = "v1"
-new_classes = ["GPGSyncDurableObject"]
+new_classes = ["GPSyncDurableObject"]
 
 # Build configuration
 [build]

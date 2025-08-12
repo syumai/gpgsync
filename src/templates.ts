@@ -79,7 +79,7 @@ export const roomTemplate = (data: RoomTemplateData): string => {
         <button id="gpOptionsBtn">Options</button>
       </div>
       <div class="link-to-github">
-        <a href="https://github.com/syumai/gpgsync" target="_blank">GitHub</a>
+        <a href="https://github.com/syumai/gpsync" target="_blank">GitHub</a>
       </div>
     </div>
   </header>

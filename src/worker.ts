@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { yRoute } from "y-durableobjects";
 import { serveStatic } from "hono/cloudflare-workers";
-import { GPGSyncDurableObject, GPGSyncEnv } from "./gpgsync-durable-object.js";
+import { GPSyncDurableObject, GPSyncEnv } from "./gpsync-durable-object.js";
 import { 
   validateRoomId, 
   validateSharedContentIdLength,
@@ -9,7 +9,7 @@ import {
 } from "./validators.js";
 import { homeTemplate, roomTemplate } from "./templates.js";
 
-type Env = GPGSyncEnv;
+type Env = GPSyncEnv;
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -114,4 +114,4 @@ app.onError((error, c) => {
 });
 
 export default app;
-export { GPGSyncDurableObject };
+export { GPSyncDurableObject };

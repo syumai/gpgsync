@@ -1,10 +1,10 @@
-# GPGSync Project Overview
+# GPSync Project Overview
 
 ## Purpose
-GPGSync is a collaborative real-time code editor based on The Go Playground. It enables multiple users to simultaneously edit Go code in shared rooms using Yjs for real-time collaboration and conflict-free collaborative editing.
+GPSync is a collaborative real-time code editor based on The Go Playground. It enables multiple users to simultaneously edit Go code in shared rooms using Yjs for real-time collaboration and conflict-free collaborative editing.
 
 ## Live Demo
-https://gpgsync.syumai.workers.dev/
+https://gpsync.syumai.workers.dev/
 
 ## Current Architecture
 The project has fully migrated to Cloudflare Workers with Durable Objects for improved scalability and global distribution.

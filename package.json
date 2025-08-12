@@ -1,5 +1,5 @@
 {
-  "name": "gpgsync",
+  "name": "gpsync",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/syumai/gpgsync.git"
+    "url": "git+https://github.com/syumai/gpsync.git"
   },
   "author": "syumai",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/syumai/gpgsync/issues"
+    "url": "https://github.com/syumai/gpsync/issues"
   },
-  "homepage": "https://github.com/syumai/gpgsync#readme",
+  "homepage": "https://github.com/syumai/gpsync#readme",
   "dependencies": {
     "@syumai/goplayground": "^0.1.6",
     "hono": "^4.7.11",

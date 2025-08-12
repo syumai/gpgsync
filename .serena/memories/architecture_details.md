@@ -2,10 +2,10 @@
 
 ## Project Structure
 ```
-gpgsync/
+gpsync/
 ├── src/                        # Cloudflare Workers code
 │   ├── worker.ts              # Hono app entry point  
-│   ├── gpgsync-durable-object.ts # Durable Object for rooms
+│   ├── gpsync-durable-object.ts # Durable Object for rooms
 │   ├── validators.ts          # Input validation
 │   └── templates.ts           # HTML templates
 ├── web/                       # Frontend TypeScript
@@ -27,7 +27,7 @@ gpgsync/
 - **Deployment**: Global distribution via Cloudflare edge network
 - **Templates**: HTML template rendering (replacing EJS)
 
-### Durable Objects (src/gpgsync-durable-object.ts)
+### Durable Objects (src/gpsync-durable-object.ts)
 - **Persistence**: Room state managed by Cloudflare Durable Objects
 - **Collaboration**: y-durableobjects for Yjs integration
 - **Transport**: WebSocket upgrades for real-time collaboration

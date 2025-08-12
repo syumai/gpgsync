@@ -1,13 +1,13 @@
 import { YDurableObjects } from "y-durableobjects";
 import * as Y from "yjs";
 
-export interface GPGSyncEnv {
-  GPGSYNC_ROOMS: DurableObjectNamespace;
+export interface GPSyncEnv {
+  GPSYNC_ROOMS: DurableObjectNamespace;
   ASSETS: Fetcher;
 }
 
 // Use any to bypass TypeScript issues with y-durableobjects for now
-export class GPGSyncDurableObject extends (YDurableObjects as any) {
+export class GPSyncDurableObject extends (YDurableObjects as any) {
   private isInitialized: boolean = false;
   
   constructor(state: DurableObjectState, env: any) {
