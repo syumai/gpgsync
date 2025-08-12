@@ -61,7 +61,7 @@ npx tsc --noEmit -p tsconfig.client.json   # Client-side
 ### Backend
 * **Runtime**: Cloudflare Workers
 * **Framework**: Hono with HTML templating
-* **Real-time**: Yjs with y-durableobjects
+* **Real-time**: Yjs with [y-durableobjects](https://github.com/napolab/y-durableobjects)
 * **Persistence**: Cloudflare Durable Objects
 * **Go Integration**: [@syumai/goplayground](https://github.com/syumai/goplayground-js) via direct API calls
 * **Language**: TypeScript with ES modules
